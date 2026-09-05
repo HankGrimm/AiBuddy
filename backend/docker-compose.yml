@@ -1,51 +1,85 @@
-version: '3.8'
+name: hackathon
 
 services:
   api:
-    build: .
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: hackathon-aibuddy:latest
+    container_name: Hackathon_api
     ports:
-      - "8000:8000"
+      - "9999:9999"
     env_file: .env
+    environment:
+      # 容器内 localhost 不可达，覆盖为 compose 网络内的服务名
+      DATABASE_URL: postgresql://monadmate:monadmate@db:5432/monadmate
+      REDIS_URL: redis://redis:6379/0
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
   db:
     image: postgres:16-alpine
+    container_name: Hackathon_db
     environment:
       POSTGRES_DB: monadmate
       POSTGRES_USER: monadmate
       POSTGRES_PASSWORD: monadmate
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - Hackathon_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monadmate -d monadmate"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
     restart: unless-stopped
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    container_name: Hackathon_redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
     restart: unless-stopped
 
   worker:
-    build: .
+    image: hackathon-aibuddy:latest
+    container_name: Hackathon_worker
     command: celery -A app.tasks.celery_app worker --loglevel=info
     env_file: .env
+    environment:
+      DATABASE_URL: postgresql://monadmate:monadmate@db:5432/monadmate
+      REDIS_URL: redis://redis:6379/0
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
   beat:
-    build: .
+    image: hackathon-aibuddy:latest
+    container_name: Hackathon_beat
     command: celery -A app.tasks.celery_app beat --loglevel=info
     env_file: .env
+    environment:
+      DATABASE_URL: postgresql://monadmate:monadmate@db:5432/monadmate
+      REDIS_URL: redis://redis:6379/0
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
+networks:
+  default:
+    name: Hackathon_network
+
 volumes:
-  postgres_data:
+  Hackathon_postgres_data:
