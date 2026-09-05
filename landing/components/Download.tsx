@@ -1,4 +1,4 @@
-const API_URL = "https://monad-mate-trust-api-production.up.railway.app";
+const API_URL = "/api";
 const GITHUB_URL = "https://github.com/HankGrimm/monad-mate-trust-api";
 
 export default function Download() {

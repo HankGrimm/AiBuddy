@@ -26,6 +26,15 @@ const nextConfig = {
       },
     ];
   },
+  // 反向代理：前端 9999 上的 /api/* 转发到后端容器（compose 内网）
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://api:9999/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -7,8 +7,10 @@ services:
       dockerfile: Dockerfile
     image: hackathon-aibuddy:latest
     container_name: Hackathon_api
+    # --root-path=/api：让 FastAPI 知道自己挂在前端 /api 代理后，docs 页才能正确加载 openapi.json
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 9999 --root-path=/api"
     ports:
-      - "9999:9999"
+      - "9998:9999"
     env_file: .env
     environment:
       # 容器内 localhost 不可达，覆盖为 compose 网络内的服务名
@@ -75,6 +77,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    restart: unless-stopped
+
+  landing:
+    build:
+      context: ../landing
+      dockerfile: Dockerfile
+    image: hackathon-landing:latest
+    container_name: Hackathon_landing
+    ports:
+      - "9999:3000"
     restart: unless-stopped
 
 networks:
