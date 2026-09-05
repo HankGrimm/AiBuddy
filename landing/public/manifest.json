@@ -1,0 +1,40 @@
+{
+  "name": "Monad Mate — Skin in the Game Social",
+  "short_name": "Monad Mate",
+  "description": "Stake USDC to DM, match, and meet. Economic accountability replaces swipe culture.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0A1E",
+  "theme_color": "#7C3AED",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Match discovery with AI scoring"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "1080x2340",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Stake-to-connect flow"
+    }
+  ]
+}

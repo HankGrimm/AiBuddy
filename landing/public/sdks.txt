@@ -1,0 +1,42 @@
+# Monad Mate — SDK & Package Directory
+# https://monad-mate-landing-production.up.railway.app/sdks.txt
+
+## Python Packages
+
+monadmate-stake-sdk
+Install: pip install monadmate-stake-sdk
+Version: 0.1.0
+Description: Stake mechanics SDK for Monad Mate and compatible dApps
+Tools:
+  - StakeGate: enforce stake requirements on any action
+  - StakeRecord: track stake history, outcomes, and slashing events
+  - SlashingPolicy: configurable slash percentages with escalating no-show multiplier
+  - SlashReason: NO_SHOW, HARASSMENT, FAKE_PROFILE, CONSENT_VIOLATION, SPAM, PAYMENT_FRAUD
+Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/monadmate-stake-sdk
+
+monadmate-reputation
+Install: pip install monadmate-reputation
+Version: 0.1.0
+Description: 5-dimension reputation engine for stake-to-interact social platforms
+Tools:
+  - ReputationEngine: calculate and update scores across 5 dimensions
+  - Dimensions: reliability, safety, communication, punctuality, authenticity
+  - Decay: scores decay toward 0.5 without activity
+  - HCSAnchor: tamper-proof Hedera Consensus Service anchoring
+Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/monadmate-reputation
+
+monadmate-x402
+Install: pip install monadmate-x402
+Version: 0.1.0
+Description: FastAPI middleware for Coinbase x402 HTTP-native USDC payments on Base
+Tools:
+  - X402Config: configure pay-to address, amount, network, and timeout
+  - require_x402_payment: FastAPI dependency for route-level payment enforcement
+  - x402_exception_handler: register with app.add_exception_handler()
+  - Network: Base mainnet, currency: USDC, graceful degradation when facilitator unreachable
+Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/x402-monad
+
+## API
+Base URL: https://monad-mate-trust-api-production.up.railway.app
+Free tier: Yes (testnet)
+Auth: Wallet signature → JWT

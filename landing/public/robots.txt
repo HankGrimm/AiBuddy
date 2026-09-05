@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+User-agent: GPTBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: PerplexityBot
+User-agent: Bytespider
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /agents.md
+Allow: /agent.md
+Allow: /agent.json
+Allow: /agent-card.json
+Allow: /mcp-server-card.json
+Allow: /agent-manifest.txt
+Allow: /sdks.txt
+Allow: /README.md
+Allow: /api.md
+Allow: /openapi.json
+
+Sitemap: https://monad-mate-landing-production.up.railway.app/sitemap.xml

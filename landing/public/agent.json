@@ -1,0 +1,35 @@
+{
+  "name": "Monad Mate",
+  "description": "Stake-to-interact social dApp on Monad. Stake USDC to DM, match, and meet. No-shows get slashed.",
+  "url": "https://monad-mate-landing-production.up.railway.app",
+  "api": "https://monad-mate-trust-api-production.up.railway.app",
+  "docs": "https://monad-mate-trust-api-production.up.railway.app/docs",
+  "openapi": "https://monad-mate-landing-production.up.railway.app/openapi.json",
+  "agent_guide": "https://monad-mate-landing-production.up.railway.app/agent.md",
+  "agents_guide": "https://monad-mate-landing-production.up.railway.app/agents.md",
+  "mcp_server": "https://monad-mate-landing-production.up.railway.app/mcp-server-card.json",
+  "capabilities": [
+    "wallet-auth",
+    "staking",
+    "matching",
+    "messaging",
+    "attestation",
+    "nft-minting",
+    "sol-transfers",
+    "reputation",
+    "ai-matchmaking",
+    "x402-payments"
+  ],
+  "auth": {
+    "type": "jwt",
+    "flow": "wallet-signature-challenge",
+    "header": "Authorization",
+    "scheme": "Bearer"
+  },
+  "network": "monad-testnet",
+  "payment_network": "base-mainnet",
+  "sdks": "https://monad-mate-landing-production.up.railway.app/sdks.txt",
+  "built_by": "AINative Studio — https://ainative.studio",
+  "hackathon": "EasyA x Consensus Miami 2026",
+  "version": "0.1.0"
+}

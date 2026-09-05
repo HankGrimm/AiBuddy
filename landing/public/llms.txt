@@ -1,0 +1,38 @@
+# Monad Mate
+> Stake USDC to DM, match, and meet. No-shows get slashed on Monad.
+
+Monad Mate is a trust-based social dApp built on Monad for the EasyA × Consensus Miami Hackathon 2026. Users stake USDC to send DMs, enter rooms, and confirm meetups. No-shows are automatically slashed. AI matchmaking powered by AINative embeddings and ZeroDB.
+
+## Key Concepts
+- Stake-to-interact: every DM, room entry, and meetup requires a USDC stake on Monad
+- Slashing: no-shows forfeit their stake with an escalating multiplier (0.5× per offense, 3× cap)
+- AI matchmaking: BAAI/bge-base-en-v1.5 embeddings + ZeroDB semantic search via AINative API
+- Moment NFTs: mint a commemorative NFT after a confirmed meetup (requires GPS attestation)
+- Reputation system: 5-dimension on-chain trust score (reliability, safety, communication, punctuality, authenticity)
+- MON gifts: transfer MON to other users
+- Coinbase x402: HTTP-native USDC payments on Base
+
+## API
+Base URL: https://monad-mate-trust-api-production.up.railway.app
+Docs: https://monad-mate-trust-api-production.up.railway.app/docs
+OpenAPI: https://monad-mate-landing-production.up.railway.app/openapi.json
+
+## Key Endpoints
+- POST /api/v1/auth/wallet/connect — wallet auth (challenge → signature → JWT)
+- GET  /api/v1/rooms — discover rooms
+- POST /api/v1/stakes — create a stake
+- POST /api/v1/matches — request a match
+- POST /api/v1/messages — send a message
+- POST /api/v1/attestations — submit meetup attestation
+- POST /api/v1/transfers — gift MON to another user
+- POST /api/v1/nfts/mint-moment — mint a Moment NFT
+- GET  /api/v1/nfts/moments — list Moment NFTs
+
+## Open Source Packages
+- monadmate-stake-sdk: pip install monadmate-stake-sdk
+- monadmate-reputation: pip install monadmate-reputation
+- monadmate-x402: pip install monadmate-x402
+
+## Full details: /llms-full.txt
+## Agent guide: /agent.md
+## API reference: /api.md

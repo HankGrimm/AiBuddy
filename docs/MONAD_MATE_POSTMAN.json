@@ -1,0 +1,418 @@
+{
+  "info": {
+    "name": "Monad Mate Trust API",
+    "description": "Complete API collection for Monad Mate — stake-to-interact social trust app built for EasyA × Consensus Miami Hackathon 2026.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token_alice", "value": "", "type": "string" },
+    { "key": "token_bob", "value": "", "type": "string" },
+    { "key": "user_id_alice", "value": "", "type": "string" },
+    { "key": "user_id_bob", "value": "", "type": "string" },
+    { "key": "persona_id_alice", "value": "", "type": "string" },
+    { "key": "persona_id_bob", "value": "", "type": "string" },
+    { "key": "room_id", "value": "", "type": "string" },
+    { "key": "match_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth — Wallet Identity",
+      "item": [
+        {
+          "name": "1. Get Nonce Challenge",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/users/challenge",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"wallet_address\": \"0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.environment.set('nonce', pm.response.json().nonce);"] }
+          }]
+        },
+        {
+          "name": "2. Onboard / Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/users/onboard",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"wallet_address\": \"0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03\",\n  \"nonce\": \"{{nonce}}\",\n  \"signature\": \"mock_sig_for_demo\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "const d = pm.response.json();",
+              "pm.environment.set('token_alice', d.access_token);",
+              "pm.environment.set('user_id_alice', d.user.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "3. Get Current User",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/users/me",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Personas",
+      "item": [
+        {
+          "name": "Create Persona",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/personas",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"display_name\": \"Alice\",\n  \"intent_mode\": \"dating\",\n  \"bio\": \"DeFi dev, sunset chaser\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.environment.set('persona_id_alice', pm.response.json().id);"] }
+          }]
+        },
+        {
+          "name": "List My Personas",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/personas",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "List Rooms",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/rooms"
+          }
+        },
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/rooms",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Speed Dating 💕\",\n  \"description\": \"Stake-gated IRL meetups\",\n  \"type\": \"event\",\n  \"privacy_level\": \"public\",\n  \"stake_required\": 5.0,\n  \"intent_modes\": [\"dating\"],\n  \"latitude\": 25.7617,\n  \"longitude\": -80.1918\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.environment.set('room_id', pm.response.json().id);"] }
+          }]
+        },
+        {
+          "name": "Join Room (with stake)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/rooms/{{room_id}}/join",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"persona_id\": \"{{persona_id_alice}}\",\n  \"stake_tx_hash\": \"testnet_tx_abc123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Discover Rooms Near Consensus Miami",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/v1/rooms/discover?lat=25.7617&lng=-80.1918&radius_km=10",
+              "query": [
+                { "key": "lat", "value": "25.7617" },
+                { "key": "lng", "value": "-80.1918" },
+                { "key": "radius_km", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Room Members",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/rooms/{{room_id}}/members",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stakes & Escrow",
+      "item": [
+        {
+          "name": "My Stakes",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/stakes",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        },
+        {
+          "name": "Create Stake",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/stakes",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"target_user_id\": \"{{user_id_bob}}\",\n  \"amount_usdc\": 5.0,\n  \"room_id\": \"{{room_id}}\",\n  \"tx_hash\": \"testnet_tx_xyz789\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Matching",
+      "item": [
+        {
+          "name": "Request Match",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/matches",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initiator_persona_id\": \"{{persona_id_alice}}\",\n  \"target_persona_id\": \"{{persona_id_bob}}\",\n  \"room_id\": \"{{room_id}}\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": ["pm.environment.set('match_id', pm.response.json().id);"] }
+          }]
+        },
+        {
+          "name": "Accept Match",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/matches/{{match_id}}/accept",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_bob}}" }]
+          }
+        },
+        {
+          "name": "List My Matches",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/matches",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/matches/{{match_id}}/messages",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Hey! Love your vibe 👋\",\n  \"sender_persona_id\": \"{{persona_id_alice}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Messages",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/matches/{{match_id}}/messages",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attestations",
+      "item": [
+        {
+          "name": "Submit Meetup Attestation",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/attestations",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"match_id\": \"{{match_id}}\",\n  \"persona_id\": \"{{persona_id_alice}}\",\n  \"met_in_person\": true,\n  \"gps_lat\": 25.7617,\n  \"gps_lng\": -80.1918\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Match Attestations",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/attestations/match/{{match_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Match Agent",
+      "item": [
+        {
+          "name": "Set Preferences",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/match-agent/preferences",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"intent_mode\": \"dating\",\n  \"interests\": [\"DeFi\", \"art\", \"yoga\"],\n  \"age_range_min\": 25,\n  \"age_range_max\": 35,\n  \"personality_traits\": [\"curious\", \"adventurous\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Suggestions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/v1/match-agent/suggestions?room_id={{room_id}}&limit=5",
+              "query": [
+                { "key": "room_id", "value": "{{room_id}}" },
+                { "key": "limit", "value": "5" }
+              ]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        },
+        {
+          "name": "Apply Vibe Filter",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/match-agent/vibe-filter",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"intent_mode\": \"dating\",\n  \"exclude_reported\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Generate Intro",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/match-agent/intro",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"target_persona_id\": \"{{persona_id_bob}}\",\n  \"context\": \"We're both at Consensus Miami!\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reputation",
+      "item": [
+        {
+          "name": "Get Reputation Score",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/v1/reputation/{{user_id_alice}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token_alice}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Safety & Moderation",
+      "item": [
+        {
+          "name": "File Report",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/safety/reports",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reported_persona_id\": \"{{persona_id_bob}}\",\n  \"category\": \"harassment\",\n  \"description\": \"Sent repeated unwanted messages.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Block User",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/v1/safety/block",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token_alice}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blocked_user_id\": \"{{user_id_bob}}\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

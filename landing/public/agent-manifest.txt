@@ -1,0 +1,51 @@
+# Monad Mate — Agent Manifest
+# https://monad-mate-landing-production.up.railway.app
+# Updated: 2026-05-06
+
+## IDENTITY
+Name: Monad Mate
+Type: Social dApp — Monad / Web3
+Tagline: Stake USDC to DM, match, and meet. No-shows get slashed.
+API Base: https://monad-mate-trust-api-production.up.railway.app
+Docs: https://monad-mate-trust-api-production.up.railway.app/docs
+Hackathon: EasyA x Consensus Miami 2026
+Built by: AINative Studio (https://ainative.studio)
+
+## AUTHENTICATION
+Flow: Wallet signature challenge
+1. POST /api/v1/auth/wallet/connect { "wallet_address": "..." } → challenge string
+2. Sign challenge with Monad wallet
+3. POST /api/v1/auth/wallet/connect { "wallet_address", "signature", "challenge" } → JWT
+4. Use: Authorization: Bearer <token>
+
+## ACTIONS
+- Discover rooms:          GET  /api/v1/rooms
+- Create stake:            POST /api/v1/stakes
+- Request match:           POST /api/v1/matches
+- Send message:            POST /api/v1/messages
+- Submit attestation:      POST /api/v1/attestations
+- Gift MON:                POST /api/v1/transfers
+- Mint Moment NFT:         POST /api/v1/nfts/mint-moment
+- List Moment NFTs:        GET  /api/v1/nfts/moments
+
+## STAKE MECHANICS
+- DM stake: 0.01 USDC minimum
+- Room stake: 0.10 USDC minimum
+- Meetup stake: 1.00 USDC minimum
+- No-show: 50% slash base, escalating 0.5x per offense, 3x cap
+- Harassment/fraud: 100% slash, always
+
+## OPEN SOURCE SDKS
+pip install monadmate-stake-sdk    # StakeGate, SlashingPolicy
+pip install monadmate-reputation   # ReputationEngine, Hedera HCS
+pip install monadmate-x402         # Coinbase x402 USDC payments
+
+## NETWORK
+Monad: testnet (mainnet post-hackathon)
+Payments: Base mainnet (Coinbase x402, USDC)
+
+## FULL REFERENCE
+/llms-full.txt  — complete manifest
+/agent.md       — agent guide
+/openapi.json   — OpenAPI spec
+/sdks.txt       — SDK directory

@@ -1,0 +1,37 @@
+{
+  "name": "Monad Mate SDK Tools",
+  "description": "Open source Python packages for integrating Monad Mate stake mechanics, reputation, and x402 payments into your app or agent.",
+  "version": "0.1.0",
+  "homepage": "https://monad-mate-landing-production.up.railway.app",
+  "repository": "https://github.com/AINative-Studio/monad-mate-trust-api",
+  "packages": [
+    {
+      "name": "monadmate-stake-sdk",
+      "runtime": "python",
+      "install": "pip install monadmate-stake-sdk",
+      "description": "StakeGate, StakeRecord, SlashingPolicy — enforce stake-to-interact mechanics",
+      "tools": ["StakeGate", "StakeRecord", "SlashingPolicy", "SlashReason"]
+    },
+    {
+      "name": "monadmate-reputation",
+      "runtime": "python",
+      "install": "pip install monadmate-reputation",
+      "description": "5-dimension ReputationEngine with decay and Hedera HCS anchoring",
+      "tools": ["ReputationEngine", "ReputationDimensions", "HCSAnchor"]
+    },
+    {
+      "name": "monadmate-x402",
+      "runtime": "python",
+      "install": "pip install monadmate-x402",
+      "description": "FastAPI middleware for Coinbase x402 HTTP-native USDC payments on Base",
+      "tools": ["X402Config", "require_x402_payment", "x402_exception_handler"]
+    }
+  ],
+  "api": {
+    "base_url": "https://monad-mate-trust-api-production.up.railway.app",
+    "docs": "https://monad-mate-trust-api-production.up.railway.app/docs",
+    "openapi": "https://monad-mate-landing-production.up.railway.app/openapi.json"
+  },
+  "free_tier": true,
+  "hackathon": "EasyA x Consensus Miami 2026"
+}

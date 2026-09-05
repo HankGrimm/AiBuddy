@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --brand-violet: #7c3aed;
+  --brand-purple: #9333ea;
+  --brand-pink: #ec4899;
+  --brand-coral: #f97316;
+  --brand-dark: #0f0a1e;
+  --brand-card: #1a1033;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--brand-dark);
+  color: #fff;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brand-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-violet);
+  border-radius: 3px;
+}
+
+/* Glow utility */
+.glow-violet {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+}
+.glow-pink {
+  box-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+}
+.text-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.border-gradient {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--brand-card), var(--brand-card)) padding-box,
+    linear-gradient(135deg, rgba(124, 58, 237, 0.6), rgba(236, 72, 153, 0.4))
+      border-box;
+}
