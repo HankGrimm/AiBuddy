@@ -15,7 +15,7 @@ Monad Mate introduces **economic accountability** to social interactions on Mona
 ## Getting Started
 
 ```bash
-git clone https://github.com/AINative-Studio/monad-mate-trust-api
+git clone https://github.com/HankGrimm/monad-mate-trust-api
 cd monad-mate-trust-api/backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt

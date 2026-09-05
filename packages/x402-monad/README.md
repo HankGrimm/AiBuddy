@@ -63,4 +63,4 @@ If the Coinbase facilitator is unreachable, requests are allowed through automat
 
 ## License
 
-MIT — extracted from [Monad Mate Trust API](https://github.com/AINative-Studio/monad-mate-trust-api). Built for EasyA × Consensus Miami 2026.
+MIT — extracted from [Monad Mate Trust API](https://github.com/HankGrimm/monad-mate-trust-api). Built for EasyA × Consensus Miami 2026.

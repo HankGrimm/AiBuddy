@@ -5,7 +5,7 @@
 [![PyPI](https://img.shields.io/pypi/v/monadmate-reputation)](https://pypi.org/project/monadmate-reputation/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
 
-Extracted from [Monad Mate Trust API](https://github.com/AINative-Studio/monad-mate-trust-api). No ORM or framework dependencies — bring your own storage.
+Extracted from [Monad Mate Trust API](https://github.com/HankGrimm/monad-mate-trust-api). No ORM or framework dependencies — bring your own storage.
 
 ## Install
 
@@ -97,4 +97,4 @@ HCSAnchor no-ops gracefully when not configured.
 
 ## License
 
-MIT — extracted from [Monad Mate Trust API](https://github.com/AINative-Studio/monad-mate-trust-api). Built for EasyA × Consensus Miami 2026.
+MIT — extracted from [Monad Mate Trust API](https://github.com/HankGrimm/monad-mate-trust-api). Built for EasyA × Consensus Miami 2026.

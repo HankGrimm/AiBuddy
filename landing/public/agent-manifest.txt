@@ -5,11 +5,11 @@
 ## IDENTITY
 Name: Monad Mate
 Type: Social dApp — Monad / Web3
-Tagline: Stake USDC to DM, match, and meet. No-shows get slashed.
+Tagline: Stake MON to DM, match, and meet. No-shows get slashed.
 API Base: https://monad-mate-trust-api-production.up.railway.app
 Docs: https://monad-mate-trust-api-production.up.railway.app/docs
 Hackathon: EasyA x Consensus Miami 2026
-Built by: AINative Studio (https://ainative.studio)
+Built by: HankGrimm (https://github.com/HankGrimm)
 
 ## AUTHENTICATION
 Flow: Wallet signature challenge
@@ -29,9 +29,9 @@ Flow: Wallet signature challenge
 - List Moment NFTs:        GET  /api/v1/nfts/moments
 
 ## STAKE MECHANICS
-- DM stake: 0.01 USDC minimum
-- Room stake: 0.10 USDC minimum
-- Meetup stake: 1.00 USDC minimum
+- DM stake: 0.01 MON minimum
+- Room stake: 0.10 MON minimum
+- Meetup stake: 1.00 MON minimum
 - No-show: 50% slash base, escalating 0.5x per offense, 3x cap
 - Harassment/fraud: 100% slash, always
 

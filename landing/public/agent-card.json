@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "name": "Monad Mate",
-  "description": "Trust-based social dApp on Monad — stake USDC to DM, match, and meet. No-shows get slashed.",
+  "description": "Trust-based social dApp on Monad — stake MON to DM, match, and meet. No-shows get slashed.",
   "url": "https://monad-mate-trust-api-production.up.railway.app",
   "iconUrl": "https://monad-mate-landing-production.up.railway.app/icon.png",
   "version": "0.1.0",
@@ -27,9 +27,9 @@
     {
       "id": "staking",
       "name": "Create Stake",
-      "description": "Stake USDC to enable DMs, room entry, or meetup proposals on Monad.",
-      "tags": ["stake", "usdc", "monad"],
-      "examples": ["Stake 0.01 USDC to send a DM", "Stake 1.00 USDC to propose a meetup"]
+      "description": "Stake MON to enable DMs, room entry, or meetup proposals on Monad.",
+      "tags": ["stake", "mon", "monad"],
+      "examples": ["Stake 0.01 MON to send a DM", "Stake 1.00 MON to propose a meetup"]
     },
     {
       "id": "matching",

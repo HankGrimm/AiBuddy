@@ -64,24 +64,24 @@ def test_validate_exact_minimum_passes():
 
 def test_create_stake_returns_active_record():
     gate = StakeGate()
-    record = gate.create_stake(user_id="user1", stake_type=StakeType.DM, amount_usdc=0.50)
+    record = gate.create_stake(user_id="user1", stake_type=StakeType.DM, amount_mon=0.50)
     assert record.status == StakeStatus.ACTIVE
     assert record.user_id == "user1"
     assert record.stake_type == StakeType.DM
-    assert record.amount_usdc == 0.50
+    assert record.amount_mon == 0.50
     assert record.id is not None
 
 
 def test_create_stake_raises_on_insufficient_amount():
     gate = StakeGate()
     with pytest.raises(ValueError, match="Minimum stake"):
-        gate.create_stake(user_id="user1", stake_type=StakeType.DM, amount_usdc=0.01)
+        gate.create_stake(user_id="user1", stake_type=StakeType.DM, amount_mon=0.01)
 
 
 def test_create_stake_triggers_on_stake_callback():
     called = []
     gate = StakeGate(on_stake=lambda r: called.append(r))
-    gate.create_stake(user_id="u1", stake_type=StakeType.DM, amount_usdc=1.0)
+    gate.create_stake(user_id="u1", stake_type=StakeType.DM, amount_mon=1.0)
     assert len(called) == 1
     assert called[0].user_id == "u1"
 

@@ -2,8 +2,8 @@ const FEATURES = [
   {
     icon: "⚡",
     title: "Stake-to-Interact",
-    desc: "USDC escrow gates every meaningful action — room entry, match requests, DM unlocks. The escrow contract holds funds on-chain. Auto-slash runs hourly via Celery.",
-    tags: ["Monad Escrow", "Circle USDC", "Celery"],
+    desc: "MON escrow gates every meaningful action — room entry, match requests, DM unlocks. The escrow contract holds funds on-chain. Auto-slash runs hourly via Celery.",
+    tags: ["Monad Escrow", "Native MON", "Celery"],
     color: "violet",
   },
   {

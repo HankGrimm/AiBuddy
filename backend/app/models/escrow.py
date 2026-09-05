@@ -30,7 +30,7 @@ class Escrow(Base):
     type = Column(SAEnum(EscrowType), nullable=False)
     initiator_user_id = Column(UUID(as_uuid=True), ForeignKey("sm_users.id", ondelete="SET NULL"), nullable=True)
     counterparty_user_id = Column(UUID(as_uuid=True), ForeignKey("sm_users.id", ondelete="SET NULL"), nullable=True)
-    amount_usdc = Column(Float, nullable=False)
+    amount_mon = Column(Float, nullable=False)
     status = Column(SAEnum(EscrowStatus), default=EscrowStatus.OPEN, nullable=False)
     hcs_topic_id = Column(String, nullable=True)  # Hedera anchoring
     dispute_reason = Column(Text, nullable=True)

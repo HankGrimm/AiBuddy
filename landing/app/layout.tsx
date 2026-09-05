@@ -6,12 +6,12 @@ const SITE_URL = "https://monad-mate-landing-production.up.railway.app";
 export const metadata: Metadata = {
   title: "Monad Mate — Skin in the Game Social on Monad",
   description:
-    "Stake USDC to DM, match, and meet on Monad. No-shows get slashed. AI matchmaking with 768-dim embeddings. GPS-verified meetups. Economic accountability replaces swipe culture.",
+    "Stake MON to DM, match, and meet on Monad. No-shows get slashed. AI matchmaking with 768-dim embeddings. GPS-verified meetups. Economic accountability replaces swipe culture.",
   keywords: [
     "Monad social app",
     "stake-to-interact",
     "Web3 dating",
-    "USDC stake",
+    "MON stake",
     "AI matchmaking",
     "Monad dApp",
     "Monad testnet",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Monad Mate — Skin in the Game Social on Monad",
     description:
-      "Stake USDC to DM, match, and meet. No-shows get slashed. Genuine connections earn reputation. AI matchmaking powered by AINative.",
+      "Stake MON to DM, match, and meet. No-shows get slashed. Genuine connections earn reputation. AI matchmaking powered by AINative.",
     siteName: "Monad Mate",
     type: "website",
     url: SITE_URL,
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Monad Mate — Skin in the Game Social on Monad",
     description:
-      "Stake USDC to DM, match, and meet. No-shows get slashed. Genuine connections earn reputation. Built on Monad.",
-    creator: "@ainativestudio",
+      "Stake MON to DM, match, and meet. No-shows get slashed. Genuine connections earn reputation. Built on Monad.",
+    creator: "@HankGrimm",
   },
   robots: {
     index: true,
@@ -60,7 +60,7 @@ const jsonLd = [
     "@type": "WebSite",
     "name": "Monad Mate",
     "url": "https://monad-mate-landing-production.up.railway.app",
-    "description": "Stake USDC to DM, match, and meet. No-shows get slashed on Monad.",
+    "description": "Stake MON to DM, match, and meet. No-shows get slashed on Monad.",
   },
   {
     "@context": "https://schema.org",
@@ -68,7 +68,7 @@ const jsonLd = [
     "name": "Monad Mate",
     "applicationCategory": "SocialNetworkingApplication",
     "operatingSystem": "Web, iOS, Android",
-    "description": "Trust-based social dApp on Monad. Stake USDC to DM, match, and meet. No-shows get slashed. AI matchmaking powered by AINative.",
+    "description": "Trust-based social dApp on Monad. Stake MON to DM, match, and meet. No-shows get slashed. AI matchmaking powered by AINative.",
     "url": "https://monad-mate-landing-production.up.railway.app",
     "softwareVersion": "0.1.0",
     "offers": {
@@ -88,20 +88,20 @@ const jsonLd = [
       "5-dimension reputation system"
     ],
     "creator": {
-      "@type": "Organization",
-      "name": "AINative Studio",
-      "url": "https://ainative.studio"
+      "@type": "Person",
+      "name": "HankGrimm",
+      "url": "https://github.com/HankGrimm"
     }
   },
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "AINative Studio",
-    "url": "https://ainative.studio",
-    "description": "AI-native developer platform — ZeroDB, ZeroMemory, Agent Cloud, MCP hosting",
+    "@type": "Person",
+    "name": "HankGrimm",
+    "url": "https://github.com/HankGrimm",
+    "description": "Builder of Monad Mate — stake-to-interact social dApp on Monad",
     "contactPoint": {
       "@type": "ContactPoint",
-      "email": "toby@ainative.studio"
+      "email": "HankGrimm91@gmail.com"
     }
   },
   {
@@ -113,7 +113,7 @@ const jsonLd = [
         "name": "What is staking in Monad Mate?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Staking means locking a small amount of USDC on Monad before you can DM someone, enter a room, or propose a meetup. It creates economic accountability — you have skin in the game."
+          "text": "Staking means locking a small amount of MON on Monad before you can DM someone, enter a room, or propose a meetup. It creates economic accountability — you have skin in the game."
         }
       },
       {

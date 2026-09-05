@@ -2,13 +2,13 @@
 
 ## Overview
 
-Monad Mate is a trust-based social dApp on Monad. Stake USDC to DM, match, and meet. No-shows get slashed. AI matchmaking powered by AINative.
+Monad Mate is a trust-based social dApp on Monad. Stake MON to DM, match, and meet. No-shows get slashed. AI matchmaking powered by AINative.
 
 ## Core APIs
 
 **Authentication** — Wallet signature challenge flow → JWT bearer token
 
-**Stakes** — Create USDC stakes for DMs, room entry, or meetups
+**Stakes** — Create MON stakes for DMs, room entry, or meetups
 
 **Matching** — AI-powered match requests with generated intro messages
 

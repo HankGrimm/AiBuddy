@@ -39,7 +39,7 @@ class Room(Base):
     starts_at = Column(DateTime, nullable=True)
     ends_at = Column(DateTime, nullable=True)
     privacy_level = Column(SAEnum(RoomPrivacyLevel), default=RoomPrivacyLevel.PUBLIC, nullable=False)
-    stake_required = Column(Float, default=0.0, nullable=False)  # USDC amount
+    stake_required = Column(Float, default=0.0, nullable=False)  # MON amount
     intent_modes = Column(JSON, default=list, nullable=False)  # list of IntentMode values
     max_members = Column(String, nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)

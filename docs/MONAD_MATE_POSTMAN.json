@@ -200,7 +200,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"target_user_id\": \"{{user_id_bob}}\",\n  \"amount_usdc\": 5.0,\n  \"room_id\": \"{{room_id}}\",\n  \"tx_hash\": \"testnet_tx_xyz789\"\n}"
+              "raw": "{\n  \"target_user_id\": \"{{user_id_bob}}\",\n  \"amount_mon\": 5.0,\n  \"room_id\": \"{{room_id}}\",\n  \"tx_hash\": \"testnet_tx_xyz789\"\n}"
             }
           }
         }

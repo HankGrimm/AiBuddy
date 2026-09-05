@@ -29,7 +29,7 @@ Response: { "items": [...], "total": int }
 
 \`\`\`
 POST /api/v1/stakes
-Body: { "stake_type": "dm|room|meetup", "target_id": "uuid", "amount_usdc": float }
+Body: { "stake_type": "dm|room|meetup", "target_id": "uuid", "amount_mon": float }
 Response: { "id": "uuid", "tx_hash": "string", "status": "pending|confirmed" }
 \`\`\`
 

@@ -9,7 +9,7 @@ const STEPS = [
     n: "02",
     icon: "🏠",
     title: "Enter a Room",
-    desc: "Browse nearby rooms — devs meetup, IRL events, social lounges. Stake-gated rooms require a USDC deposit to enter. Your stake comes back when you show up.",
+    desc: "Browse nearby rooms — devs meetup, IRL events, social lounges. Stake-gated rooms require a MON deposit to enter. Your stake comes back when you show up.",
   },
   {
     n: "03",
@@ -21,7 +21,7 @@ const STEPS = [
     n: "04",
     icon: "💰",
     title: "Stake to Connect",
-    desc: "Put 0.5 USDC in escrow to unlock the DM channel. Both parties stake. Bad actors forfeit. Genuine conversations earn reputation and get their stake back.",
+    desc: "Put 0.5 MON in escrow to unlock the DM channel. Both parties stake. Bad actors forfeit. Genuine conversations earn reputation and get their stake back.",
   },
   {
     n: "05",

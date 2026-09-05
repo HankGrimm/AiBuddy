@@ -2,9 +2,9 @@ const AGENTS_MD = `# Monad Mate — Agent Interaction Guide
 
 ## What Monad Mate Is
 
-Monad Mate is a trust-based social dApp on Monad. Users stake USDC to send DMs, enter rooms, and confirm meetups. No-shows are automatically slashed. AI matchmaking is powered by AINative embeddings and ZeroDB semantic search.
+Monad Mate is a trust-based social dApp on Monad. Users stake MON to send DMs, enter rooms, and confirm meetups. No-shows are automatically slashed. AI matchmaking is powered by AINative embeddings and ZeroDB semantic search.
 
-Built for the EasyA × Consensus Miami Hackathon 2026 by AINative Studio.
+Built for the EasyA × Consensus Miami Hackathon 2026 by HankGrimm.
 
 ## API Base
 
@@ -41,7 +41,7 @@ Monad Mate uses wallet-signature JWT authentication:
 \`\`\`bash
 pip install monadmate-stake-sdk    # StakeGate, SlashingPolicy
 pip install monadmate-reputation   # ReputationEngine, Hedera HCS anchoring
-pip install monadmate-x402         # Coinbase x402 USDC payment middleware
+pip install monadmate-x402         # Coinbase x402 MON payment middleware
 \`\`\`
 
 ## Full Reference

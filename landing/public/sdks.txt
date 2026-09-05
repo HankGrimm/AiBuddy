@@ -12,7 +12,7 @@ Tools:
   - StakeRecord: track stake history, outcomes, and slashing events
   - SlashingPolicy: configurable slash percentages with escalating no-show multiplier
   - SlashReason: NO_SHOW, HARASSMENT, FAKE_PROFILE, CONSENT_VIOLATION, SPAM, PAYMENT_FRAUD
-Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/monadmate-stake-sdk
+Repo: https://github.com/HankGrimm/monad-mate-trust-api/tree/main/packages/monadmate-stake-sdk
 
 monadmate-reputation
 Install: pip install monadmate-reputation
@@ -23,7 +23,7 @@ Tools:
   - Dimensions: reliability, safety, communication, punctuality, authenticity
   - Decay: scores decay toward 0.5 without activity
   - HCSAnchor: tamper-proof Hedera Consensus Service anchoring
-Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/monadmate-reputation
+Repo: https://github.com/HankGrimm/monad-mate-trust-api/tree/main/packages/monadmate-reputation
 
 monadmate-x402
 Install: pip install monadmate-x402
@@ -34,7 +34,7 @@ Tools:
   - require_x402_payment: FastAPI dependency for route-level payment enforcement
   - x402_exception_handler: register with app.add_exception_handler()
   - Network: Base mainnet, currency: USDC, graceful degradation when facilitator unreachable
-Repo: https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/x402-monad
+Repo: https://github.com/HankGrimm/monad-mate-trust-api/tree/main/packages/x402-monad
 
 ## API
 Base URL: https://monad-mate-trust-api-production.up.railway.app

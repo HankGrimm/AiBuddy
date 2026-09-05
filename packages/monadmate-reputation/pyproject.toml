@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Portable on-chain reputation decay with Hedera HCS anchoring for Web3 social apps"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [{ name = "AINative Studio", email = "hello@ainative.studio" }]
+authors = [{ name = "HankGrimm", email = "HankGrimm91@gmail.com" }]
 keywords = ["reputation", "hedera", "hcs", "monad", "web3", "social", "decay", "trust"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -26,5 +26,5 @@ dependencies = [
 dev = ["pytest>=7", "pytest-asyncio>=0.21"]
 
 [project.urls]
-Homepage = "https://github.com/AINative-Studio/monad-mate-trust-api"
-Repository = "https://github.com/AINative-Studio/monad-mate-trust-api/tree/main/packages/monadmate-reputation"
+Homepage = "https://github.com/HankGrimm/monad-mate-trust-api"
+Repository = "https://github.com/HankGrimm/monad-mate-trust-api/tree/main/packages/monadmate-reputation"

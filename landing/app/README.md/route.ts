@@ -1,13 +1,13 @@
 const README = `# Monad Mate
 
-Stake USDC to DM, match, and meet. No-shows get slashed on Monad.
+Stake MON to DM, match, and meet. No-shows get slashed on Monad.
 
-Built for the **EasyA × Consensus Miami Hackathon 2026** by AINative Studio.
+Built for the **EasyA × Consensus Miami Hackathon 2026** by HankGrimm.
 
 ## How It Works
 
 1. Connect your MetaMask or Rabby wallet
-2. Stake USDC to send a DM, enter a room, or propose a meetup
+2. Stake MON to send a DM, enter a room, or propose a meetup
 3. Both parties confirm via GPS attestation
 4. No-show → stake slashed. Show up → stake returned + reputation boost
 5. After a confirmed meetup, mint a Moment NFT

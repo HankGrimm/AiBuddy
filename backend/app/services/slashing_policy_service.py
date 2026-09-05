@@ -17,7 +17,7 @@ from ..models.report import Report, ReportType
 class SlashDecision:
     """Result returned by every evaluate_* method."""
     should_slash: bool
-    slash_amount_usdc: float
+    slash_amount_mon: float
     reason: str
     penalty_pct: float = 1.0  # fraction of stake to slash (0.0–1.0)
     notes: str = ""
@@ -57,17 +57,17 @@ class SlashingPolicyService:
         if stake.status not in (StakeStatus.ACTIVE, StakeStatus.PENDING):
             return SlashDecision(
                 should_slash=False,
-                slash_amount_usdc=0.0,
+                slash_amount_mon=0.0,
                 reason="Stake is not in a slashable state",
                 penalty_pct=0.0,
             )
 
         multiplier = self.get_stake_multiplier(stake.user_id)
-        slash_amount = stake.amount_usdc  # full stake slashed for no-show
+        slash_amount = stake.amount_mon  # full stake slashed for no-show
 
         return SlashDecision(
             should_slash=True,
-            slash_amount_usdc=slash_amount,
+            slash_amount_mon=slash_amount,
             reason="No-show: meetup commitment not honoured",
             penalty_pct=1.0,
             notes=f"Stake multiplier for future stakes: {multiplier}",
@@ -82,7 +82,7 @@ class SlashingPolicyService:
         if stake.status not in (StakeStatus.ACTIVE, StakeStatus.PENDING):
             return SlashDecision(
                 should_slash=False,
-                slash_amount_usdc=0.0,
+                slash_amount_mon=0.0,
                 reason="Stake is not in a slashable state",
                 penalty_pct=0.0,
             )
@@ -90,16 +90,16 @@ class SlashingPolicyService:
         if report.report_type not in (ReportType.HARASSMENT,):
             return SlashDecision(
                 should_slash=False,
-                slash_amount_usdc=0.0,
+                slash_amount_mon=0.0,
                 reason="Report type does not trigger harassment slashing",
                 penalty_pct=0.0,
             )
 
-        slash_amount = round(stake.amount_usdc * HARASSMENT_SLASH_PCT, 6)
+        slash_amount = round(stake.amount_mon * HARASSMENT_SLASH_PCT, 6)
 
         return SlashDecision(
             should_slash=True,
-            slash_amount_usdc=slash_amount,
+            slash_amount_mon=slash_amount,
             reason=f"Confirmed harassment report #{report.id}",
             penalty_pct=HARASSMENT_SLASH_PCT,
             notes=f"Report description: {report.description[:120]}",
@@ -119,7 +119,7 @@ class SlashingPolicyService:
 
         return SlashDecision(
             should_slash=True,
-            slash_amount_usdc=0.0,  # caller must multiply by reporter's stake amount
+            slash_amount_mon=0.0,  # caller must multiply by reporter's stake amount
             reason=f"False report filed against user {report.reported_user_id}",
             penalty_pct=FALSE_REPORT_SLASH_PCT,
             notes="50 % of reporter's active stake will be slashed",

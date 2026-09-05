@@ -3,7 +3,7 @@
   "description": "Open source Python packages for integrating Monad Mate stake mechanics, reputation, and x402 payments into your app or agent.",
   "version": "0.1.0",
   "homepage": "https://monad-mate-landing-production.up.railway.app",
-  "repository": "https://github.com/AINative-Studio/monad-mate-trust-api",
+  "repository": "https://github.com/HankGrimm/monad-mate-trust-api",
   "packages": [
     {
       "name": "monadmate-stake-sdk",

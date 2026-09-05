@@ -7,7 +7,7 @@ from ..models.stake import StakeType, StakeStatus
 
 class StakeCreate(BaseModel):
     stake_type: StakeType
-    amount_usdc: float = Field(..., gt=0)
+    amount_mon: float = Field(..., gt=0)
     room_id: Optional[UUID] = None
     target_user_id: Optional[UUID] = None
     tx_hash: Optional[str] = None
@@ -18,7 +18,7 @@ class StakeResponse(BaseModel):
     user_id: UUID
     stake_type: StakeType
     status: StakeStatus
-    amount_usdc: float
+    amount_mon: float
     currency: str
     tx_hash: Optional[str]
     escrow_id: Optional[UUID]

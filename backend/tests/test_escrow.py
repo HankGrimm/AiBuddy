@@ -71,14 +71,14 @@ def test_create_meetup_escrow(db: Session):
     payload = EscrowCreate(
         type=EscrowType.MEETUP,
         counterparty_user_id=counterparty.id,
-        amount_usdc=10.0,
+        amount_mon=10.0,
         confirm_deadline=datetime.utcnow() + timedelta(days=3),
     )
     escrow = svc.create_meetup(initiator, payload)
 
     assert escrow.id is not None
     assert escrow.status == EscrowStatus.OPEN
-    assert escrow.amount_usdc == 10.0
+    assert escrow.amount_mon == 10.0
     assert escrow.initiator_user_id == initiator.id
     assert escrow.counterparty_user_id == counterparty.id
     assert escrow.type == EscrowType.MEETUP
@@ -95,14 +95,14 @@ def test_create_meetup_escrow_persisted(db: Session):
     payload = EscrowCreate(
         type=EscrowType.MEETUP,
         counterparty_user_id=counterparty.id,
-        amount_usdc=7.5,
+        amount_mon=7.5,
     )
     escrow = svc.create_meetup(initiator, payload)
     eid = escrow.id
 
     fetched = db.query(Escrow).filter(Escrow.id == eid).first()
     assert fetched is not None
-    assert fetched.amount_usdc == 7.5
+    assert fetched.amount_mon == 7.5
 
 
 # ---------------------------------------------------------------------------
@@ -120,7 +120,7 @@ def test_confirm_escrow_by_counterparty(db: Session):
         EscrowCreate(
             type=EscrowType.MEETUP,
             counterparty_user_id=counterparty.id,
-            amount_usdc=5.0,
+            amount_mon=5.0,
         ),
     )
 
@@ -141,7 +141,7 @@ def test_confirm_escrow_by_initiator(db: Session):
         EscrowCreate(
             type=EscrowType.MEETUP,
             counterparty_user_id=counterparty.id,
-            amount_usdc=5.0,
+            amount_mon=5.0,
         ),
     )
     confirmed = svc.confirm(initiator, escrow.id)
@@ -160,7 +160,7 @@ def test_confirm_escrow_by_stranger_rejected(db: Session):
         EscrowCreate(
             type=EscrowType.MEETUP,
             counterparty_user_id=counterparty.id,
-            amount_usdc=5.0,
+            amount_mon=5.0,
         ),
     )
 
@@ -183,7 +183,7 @@ def test_dispute_escrow_records_reason(db: Session):
         EscrowCreate(
             type=EscrowType.MEETUP,
             counterparty_user_id=counterparty.id,
-            amount_usdc=8.0,
+            amount_mon=8.0,
         ),
     )
 
@@ -206,7 +206,7 @@ def test_dispute_escrow_by_stranger_rejected(db: Session):
         EscrowCreate(
             type=EscrowType.MEETUP,
             counterparty_user_id=counterparty.id,
-            amount_usdc=5.0,
+            amount_mon=5.0,
         ),
     )
 
@@ -227,14 +227,14 @@ def test_slashing_policy_harassment(db: Session):
 
     stake = stake_svc.create(
         offender,
-        StakeCreate(stake_type=StakeType.DM, amount_usdc=2.0),
+        StakeCreate(stake_type=StakeType.DM, amount_mon=2.0),
     )
     report = make_report(db, reporter, offender, ReportType.HARASSMENT)
 
     decision = policy.evaluate_harassment(report, stake)
 
     assert decision.should_slash is True
-    assert decision.slash_amount_usdc == stake.amount_usdc
+    assert decision.slash_amount_mon == stake.amount_mon
     assert decision.penalty_pct == 1.0
 
 

@@ -9,7 +9,6 @@ from ..models.user import User
 from ..schemas.stake import StakeCreate
 from ..core.config import settings
 from ..core.errors import StakeNotFoundError, InsufficientStakeError
-from .circle_service import CircleService
 from .hcs_anchoring_service import HCSAnchoringService
 from .monad_service import MonadService
 
@@ -19,23 +18,23 @@ class StakeService:
         self.db = db
 
     MIN_AMOUNTS = {
-        StakeType.DM: lambda: settings.MIN_STAKE_DM_USDC,
-        StakeType.JOIN_ROOM: lambda: settings.MIN_STAKE_ROOM_USDC,
-        StakeType.REQUEST_MEETUP: lambda: settings.MIN_STAKE_MEETUP_USDC,
-        StakeType.CONFIRM_MEETUP: lambda: settings.MIN_STAKE_MEETUP_USDC,
+        StakeType.DM: lambda: settings.MIN_STAKE_DM_MON,
+        StakeType.JOIN_ROOM: lambda: settings.MIN_STAKE_ROOM_MON,
+        StakeType.REQUEST_MEETUP: lambda: settings.MIN_STAKE_MEETUP_MON,
+        StakeType.CONFIRM_MEETUP: lambda: settings.MIN_STAKE_MEETUP_MON,
         StakeType.UNLOCK_PHOTO: lambda: 0.5,
     }
 
     def create(self, user: User, payload: StakeCreate) -> Stake:
         min_amt = self.MIN_AMOUNTS.get(payload.stake_type, lambda: 0.0)()
-        if payload.amount_usdc < min_amt:
-            raise InsufficientStakeError(min_amt, payload.amount_usdc)
+        if payload.amount_mon < min_amt:
+            raise InsufficientStakeError(min_amt, payload.amount_mon)
 
         stake = Stake(
             id=uuid.uuid4(),
             user_id=user.id,
             stake_type=payload.stake_type,
-            amount_usdc=payload.amount_usdc,
+            amount_mon=payload.amount_mon,
             room_id=payload.room_id,
             target_user_id=payload.target_user_id,
             tx_hash=payload.tx_hash,
@@ -44,18 +43,14 @@ class StakeService:
         self.db.add(stake)
         self.db.commit()
         self.db.refresh(stake)
-        CircleService().debit_stake(
-            source_wallet_id=user.wallet_address,
-            amount_usdc=payload.amount_usdc,
-            stake_id=stake.id,
-        )
-        # Record stake on-chain in the event log (Monad testnet).  Non-fatal —
+        # Funds are held on-chain by the MonadMateEscrow contract (native MON).
+        # Record the stake in the event log (Monad testnet).  Non-fatal —
         # if Monad is unavailable the DB record is already committed and
         # tx_hash stays as whatever the caller supplied (or None).
         tx_hash = MonadService().submit_stake_record(
             stake_id=stake.id,
             user_wallet=getattr(user, "wallet_address", None),
-            amount_usdc=payload.amount_usdc,
+            amount_mon=payload.amount_mon,
             stake_type=payload.stake_type.value,
         )
         if tx_hash:
@@ -80,21 +75,16 @@ class StakeService:
             raise HTTPException(400, "Stake cannot be refunded in its current state")
         stake.status = StakeStatus.REFUNDED
         stake.resolved_at = datetime.utcnow()
-        CircleService().credit_refund(
-            destination_wallet_id=user.wallet_address,
-            amount_usdc=stake.amount_usdc,
-            stake_id=stake.id,
-        )
         HCSAnchoringService().anchor_stake_decision(
             stake_id=stake.id,
             user_id=user.id,
             decision="refunded",
-            amount_usdc=stake.amount_usdc,
+            amount_mon=stake.amount_mon,
         )
         tx_hash = MonadService().submit_refund_record(
             stake_id=stake.id,
             user_wallet=getattr(user, "wallet_address", None),
-            amount_usdc=stake.amount_usdc,
+            amount_mon=stake.amount_mon,
         )
         if tx_hash:
             stake.tx_hash = tx_hash
@@ -109,22 +99,17 @@ class StakeService:
         stake.status = StakeStatus.SLASHED
         stake.slash_reason = reason
         stake.resolved_at = datetime.utcnow()
-        CircleService().transfer_slash(
-            amount_usdc=stake.amount_usdc,
-            stake_id=stake.id,
-            reason=reason,
-        )
         HCSAnchoringService().anchor_stake_decision(
             stake_id=stake.id,
             user_id=stake.user_id,
             decision="slashed",
-            amount_usdc=stake.amount_usdc,
+            amount_mon=stake.amount_mon,
             slash_reason=reason,
         )
         tx_hash = MonadService().submit_slash_record(
             stake_id=stake.id,
             user_wallet=getattr(stake, "user_wallet_address", None),
-            amount_usdc=stake.amount_usdc,
+            amount_mon=stake.amount_mon,
             reason=reason,
         )
         if tx_hash:

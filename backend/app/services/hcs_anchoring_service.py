@@ -63,7 +63,7 @@ class HCSAnchoringService:
         stake_id: UUID,
         user_id: UUID,
         decision: str,      # "refunded" | "slashed"
-        amount_usdc: float,
+        amount_mon: float,
         slash_reason: Optional[str] = None,
     ) -> Optional[str]:
         return self._publish({
@@ -71,7 +71,7 @@ class HCSAnchoringService:
             "stake_id": str(stake_id),
             "user_id": str(user_id),
             "decision": decision,
-            "amount_usdc": amount_usdc,
+            "amount_mon": amount_mon,
             "slash_reason": slash_reason,
             "timestamp": datetime.utcnow().isoformat(),
         })
@@ -99,13 +99,13 @@ class HCSAnchoringService:
         escrow_id: UUID,
         event: str,         # "opened" | "confirmed" | "disputed" | "resolved"
         user_id: UUID,
-        amount_usdc: float,
+        amount_mon: float,
     ) -> Optional[str]:
         return self._publish({
             "event": f"escrow_{event}",
             "escrow_id": str(escrow_id),
             "user_id": str(user_id),
-            "amount_usdc": amount_usdc,
+            "amount_mon": amount_mon,
             "timestamp": datetime.utcnow().isoformat(),
         })
 

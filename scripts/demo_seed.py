@@ -245,7 +245,7 @@ def seed(api: APIClient):
         resp = api.post("/v1/rooms", room, token=alice_token)
         data = api.require(resp, 201, f"room/{room['name']}")
         room_ids[room["name"]] = data["id"]
-        ok(f"Room created: {room['name']} (stake: {room['stake_required']} USDC)")
+        ok(f"Room created: {room['name']} (stake: {room['stake_required']} MON)")
 
     # ── 5. Join rooms ────────────────────────────────────────────────────────
     section("5. Joining Rooms")
@@ -420,7 +420,7 @@ def seed(api: APIClient):
         nearby = resp.json()
         ok(f"Found {len(nearby)} room(s) within 10km of Bayside Marketplace")
         for r in nearby:
-            print(f"     {r['name']} — stake: {r.get('stake_required', 0)} USDC")
+            print(f"     {r['name']} — stake: {r.get('stake_required', 0)} MON")
     else:
         warn(f"Room discover returned {resp.status_code}")
 

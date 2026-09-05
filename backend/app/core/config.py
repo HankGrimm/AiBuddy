@@ -26,14 +26,8 @@ class Settings(BaseSettings):
     MONAD_CHAIN_ID: int = 10143
     MONAD_ESCROW_ADDRESS: Optional[str] = None
     MONAD_EVENT_LOG_ADDRESS: Optional[str] = None
-    MONAD_USDC_ADDRESS: Optional[str] = None
     MONAD_PRIVATE_KEY: Optional[str] = None
     MONAD_KEYSTORE_PATH: str = "~/.monad/backend.key"
-
-    # Circle (USDC payments / escrow)
-    CIRCLE_API_KEY: Optional[str] = None
-    CIRCLE_WALLET_SET_ID: Optional[str] = None
-    CIRCLE_BASE_URL: str = "https://api-sandbox.circle.com"
 
     # Hedera (HCS anchoring + reputation)
     HEDERA_ACCOUNT_ID: Optional[str] = None
@@ -61,9 +55,9 @@ class Settings(BaseSettings):
     COINBASE_PAYMENT_ADDRESS: str = ""
 
     # Safety
-    MIN_STAKE_DM_USDC: float = 1.0
-    MIN_STAKE_MEETUP_USDC: float = 5.0
-    MIN_STAKE_ROOM_USDC: float = 0.5
+    MIN_STAKE_DM_MON: float = 1.0
+    MIN_STAKE_MEETUP_MON: float = 5.0
+    MIN_STAKE_ROOM_MON: float = 0.5
     SLASH_AMOUNT_NO_SHOW: float = 5.0
 
     # CORS

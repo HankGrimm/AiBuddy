@@ -1,4 +1,4 @@
-const GITHUB_URL = "https://github.com/AINative-Studio/monad-mate-trust-api";
+const GITHUB_URL = "https://github.com/HankGrimm/monad-mate-trust-api";
 
 const PACKAGES = [
   {
@@ -6,7 +6,7 @@ const PACKAGES = [
     install: "pip install monadmate-stake-sdk",
     pypiUrl: "https://pypi.org/project/monadmate-stake-sdk/",
     registries: "PyPI",
-    desc: "Stake-gated access control for any Monad dApp. Require USDC escrow before DMs, room entry, or any action.",
+    desc: "Stake-gated access control for any Monad dApp. Require MON escrow before DMs, room entry, or any action.",
     status: "live",
   },
   {

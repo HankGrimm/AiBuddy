@@ -65,7 +65,7 @@ def test_bytes32_tag_is_right_padded():
 def test_stake_record_returns_none_without_key():
     with patch("app.services.monad_service._load_private_key", return_value=None):
         result = MonadService().submit_stake_record(
-            stake_id="abc", user_wallet="0xabc", amount_usdc=1.0, stake_type="dm"
+            stake_id="abc", user_wallet="0xabc", amount_mon=1.0, stake_type="dm"
         )
     assert result is None
 
@@ -78,7 +78,7 @@ def test_refund_record_returns_none_on_rpc_failure():
         return_value=acct.key.hex(),
     ), patch("web3.Web3.HTTPProvider", side_effect=RuntimeError("boom")):
         result = MonadService().submit_refund_record(
-            stake_id="abc", user_wallet=acct.address, amount_usdc=1.0
+            stake_id="abc", user_wallet=acct.address, amount_mon=1.0
         )
     assert result is None
 
@@ -90,6 +90,6 @@ def test_slash_record_returns_none_on_rpc_failure():
         return_value=acct.key.hex(),
     ), patch("web3.Web3.HTTPProvider", side_effect=RuntimeError("boom")):
         result = MonadService().submit_slash_record(
-            stake_id="abc", user_wallet=acct.address, amount_usdc=1.0, reason="no_show"
+            stake_id="abc", user_wallet=acct.address, amount_mon=1.0, reason="no_show"
         )
     assert result is None

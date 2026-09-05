@@ -37,10 +37,10 @@ def make_user(db: Session, wallet: str = None) -> User:
 # ---------------------------------------------------------------------------
 
 def test_create_stake_dm_minimum_enforced(db: Session):
-    """Stake below MIN_STAKE_DM_USDC (1.0) must raise InsufficientStakeError."""
+    """Stake below MIN_STAKE_DM_MON (1.0) must raise InsufficientStakeError."""
     user = make_user(db)
     svc = StakeService(db)
-    payload = StakeCreate(stake_type=StakeType.DM, amount_usdc=0.50)
+    payload = StakeCreate(stake_type=StakeType.DM, amount_mon=0.50)
 
     with pytest.raises(InsufficientStakeError):
         svc.create(user, payload)
@@ -50,18 +50,18 @@ def test_create_stake_dm_at_minimum_succeeds(db: Session):
     """Stake exactly at DM minimum should succeed."""
     user = make_user(db)
     svc = StakeService(db)
-    payload = StakeCreate(stake_type=StakeType.DM, amount_usdc=1.0)
+    payload = StakeCreate(stake_type=StakeType.DM, amount_mon=1.0)
 
     stake = svc.create(user, payload)
     assert stake.status == StakeStatus.ACTIVE
-    assert stake.amount_usdc == 1.0
+    assert stake.amount_mon == 1.0
 
 
 def test_create_stake_meetup_minimum_enforced(db: Session):
-    """Stake below MIN_STAKE_MEETUP_USDC (5.0) must raise InsufficientStakeError."""
+    """Stake below MIN_STAKE_MEETUP_MON (5.0) must raise InsufficientStakeError."""
     user = make_user(db)
     svc = StakeService(db)
-    payload = StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=2.0)
+    payload = StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=2.0)
 
     with pytest.raises(InsufficientStakeError):
         svc.create(user, payload)
@@ -71,7 +71,7 @@ def test_create_stake_meetup_at_minimum_succeeds(db: Session):
     """Stake exactly at meetup minimum should succeed."""
     user = make_user(db)
     svc = StakeService(db)
-    payload = StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0)
+    payload = StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0)
 
     stake = svc.create(user, payload)
     assert stake.status == StakeStatus.ACTIVE
@@ -86,7 +86,7 @@ def test_refund_stake_changes_status(db: Session):
     """Refunding an active stake must flip status to REFUNDED and set resolved_at."""
     user = make_user(db)
     svc = StakeService(db)
-    stake = svc.create(user, StakeCreate(stake_type=StakeType.DM, amount_usdc=1.0))
+    stake = svc.create(user, StakeCreate(stake_type=StakeType.DM, amount_mon=1.0))
 
     refunded = svc.refund(user, stake.id)
 
@@ -102,7 +102,7 @@ def test_slash_stake_records_reason(db: Session):
     """Slashing a stake must record status=SLASHED, slash_reason, and resolved_at."""
     user = make_user(db)
     svc = StakeService(db)
-    stake = svc.create(user, StakeCreate(stake_type=StakeType.DM, amount_usdc=1.0))
+    stake = svc.create(user, StakeCreate(stake_type=StakeType.DM, amount_mon=1.0))
 
     slashed = svc.slash(user, stake.id, reason="no-show: missed confirmed meetup")
 
@@ -121,11 +121,11 @@ def test_slashing_policy_no_show(db: Session):
     svc = StakeService(db)
     policy = SlashingPolicyService(db)
 
-    stake = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0))
+    stake = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0))
     decision = policy.evaluate_no_show(stake)
 
     assert decision.should_slash is True
-    assert decision.slash_amount_usdc == stake.amount_usdc
+    assert decision.slash_amount_mon == stake.amount_mon
     assert decision.penalty_pct == 1.0
     assert "no-show" in decision.reason.lower()
 
@@ -136,7 +136,7 @@ def test_slashing_policy_no_show_inactive_stake(db: Session):
     svc = StakeService(db)
     policy = SlashingPolicyService(db)
 
-    stake = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0))
+    stake = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0))
     svc.slash(user, stake.id, reason="no-show: prior event")
     db.refresh(stake)
 
@@ -156,7 +156,7 @@ def test_slashing_policy_three_no_shows_suspends_dm(db: Session):
     for i in range(3):
         s = svc.create(
             user,
-            StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0),
+            StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0),
         )
         svc.slash(user, s.id, reason="no-show: missed meetup")
 
@@ -173,11 +173,11 @@ def test_stake_multiplier_increases_with_no_shows(db: Session):
     assert policy.get_stake_multiplier(user.id) == 1.0
 
     # 1 no-show → multiplier 1.5
-    s = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0))
+    s = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0))
     svc.slash(user, s.id, reason="no-show: missed meetup")
     assert policy.get_stake_multiplier(user.id) == 1.5
 
     # 2 no-shows → multiplier 2.0
-    s2 = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_usdc=5.0))
+    s2 = svc.create(user, StakeCreate(stake_type=StakeType.REQUEST_MEETUP, amount_mon=5.0))
     svc.slash(user, s2.id, reason="no-show: missed meetup")
     assert policy.get_stake_multiplier(user.id) == 2.0

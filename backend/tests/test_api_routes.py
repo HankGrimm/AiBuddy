@@ -58,7 +58,7 @@ def _room(db) -> Room:
 def _stake(db, user: User, **kwargs) -> Stake:
     s = Stake(
         id=uuid.uuid4(), user_id=user.id,
-        stake_type=StakeType.JOIN_ROOM, amount_usdc=2.0,
+        stake_type=StakeType.JOIN_ROOM, amount_mon=2.0,
         status=StakeStatus.ACTIVE, **kwargs
     )
     db.add(s)
@@ -86,7 +86,7 @@ def _match(db, persona_a: Persona, persona_b: Persona) -> Match:
 class TestStakesAPI:
     def test_create_stake_requires_auth(self, client):
         resp = client.post("/v1/stakes", json={
-            "stake_type": "join_room", "amount_usdc": 2.0,
+            "stake_type": "join_room", "amount_mon": 2.0,
         })
         assert resp.status_code in (401, 403)
 
@@ -94,12 +94,12 @@ class TestStakesAPI:
         user = _user(db)
         resp = client.post("/v1/stakes", json={
             "stake_type": "join_room",
-            "amount_usdc": 2.0,
+            "amount_mon": 2.0,
             "tx_hash": "testnet_tx_abc",
         }, headers=_auth(user))
         assert resp.status_code == 201
         data = resp.json()
-        assert data["amount_usdc"] == 2.0
+        assert data["amount_mon"] == 2.0
         assert data["status"] == "active"
 
     def test_list_my_stakes_empty(self, client, db):
@@ -152,15 +152,15 @@ class TestEscrowAPI:
         resp = client.post("/v1/escrow/meetup", json={
             "type": "meetup",
             "counterparty_user_id": str(other.id),
-            "amount_usdc": 5.0,
+            "amount_mon": 5.0,
         }, headers=_auth(user))
         assert resp.status_code == 201
-        assert resp.json()["amount_usdc"] == 5.0
+        assert resp.json()["amount_mon"] == 5.0
 
     def test_create_escrow_requires_auth(self, client):
         resp = client.post("/v1/escrow/meetup", json={
             "counterparty_user_id": str(uuid.uuid4()),
-            "amount_usdc": 5.0,
+            "amount_mon": 5.0,
         })
         assert resp.status_code in (401, 403)
 
@@ -170,7 +170,7 @@ class TestEscrowAPI:
         other = _user(db)
         escrow = Escrow(
             id=uuid.uuid4(), initiator_user_id=user.id, type=EscrowType.MEETUP,
-            counterparty_user_id=other.id, amount_usdc=5.0,
+            counterparty_user_id=other.id, amount_mon=5.0,
             status=EscrowStatus.OPEN,
         )
         db.add(escrow)
@@ -185,7 +185,7 @@ class TestEscrowAPI:
         other = _user(db)
         escrow = Escrow(
             id=uuid.uuid4(), initiator_user_id=user.id, type=EscrowType.MEETUP,
-            counterparty_user_id=other.id, amount_usdc=5.0,
+            counterparty_user_id=other.id, amount_mon=5.0,
             status=EscrowStatus.OPEN,
         )
         db.add(escrow)

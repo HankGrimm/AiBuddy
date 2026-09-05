@@ -5,11 +5,11 @@
 [![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen)](backend/)
 [![Deployed](https://img.shields.io/badge/API-live%20on%20Railway-blue)](https://monad-mate-trust-api-production.up.railway.app/health)
 
-> **Submission description (≤300 chars):** Monad Mate — stake USDC to DM, match, and meet. No-shows and harassment get slashed on Monad. AI matchmaking, GPS attestation, HCS audit trail, and Coinbase x402 payments. Skin in the game replaces swipe culture.
+> **Submission description (≤300 chars):** Monad Mate — stake MON to DM, match, and meet. No-shows and harassment get slashed on Monad. AI matchmaking, GPS attestation, HCS audit trail, and Coinbase x402 payments. Skin in the game replaces swipe culture.
 
 **Monad Mate is a stake-to-interact social app where skin-in-the-game replaces swipe culture.**
 
-Users stake USDC to enter rooms, request matches, and unlock DMs. Genuine meetups release the stake back. No-shows and harassment get slashed. An AI match agent surfaces compatible people. Every safety decision is anchored on Hedera HCS for immutable auditability.
+Users stake MON to enter rooms, request matches, and unlock DMs. Genuine meetups release the stake back. No-shows and harassment get slashed. An AI match agent surfaces compatible people. Every safety decision is anchored on Hedera HCS for immutable auditability.
 
 
 ---
@@ -22,7 +22,7 @@ Dating and social apps have zero cost for bad behavior — ghosting, harassment,
 
 Monad Mate introduces **economic accountability** into social interactions:
 
-- **Stake to interact** — put up USDC to enter a room or DM someone. It comes back if you show up.
+- **Stake to interact** — put up MON to enter a room or DM someone. It comes back if you show up.
 - **Slash bad actors** — no-shows lose 50%, harassment loses 100% of their stake.
 - **AI matchmaking** — vector-based compatibility scoring finds real chemistry, not just swipes.
 - **Meetup attestation** — both parties confirm the meeting via GPS or QR code, triggering stake release and reputation boost.
@@ -45,12 +45,12 @@ Monad Mate introduces **economic accountability** into social interactions:
 
 ### Rooms
 - Types: `lounge`, `topic`, `event`, `private`
-- Stake-gated entry: rooms can require USDC stake to join
+- Stake-gated entry: rooms can require MON stake to join
 - Location-aware: GPS coordinates + haversine distance discovery
 - Intent-mode filtering: only see rooms that match your vibe
 
 ### Stake-to-Interact
-- Stake USDC on-chain (Monad Solidity contract) to enter a room or initiate a match
+- Stake MON on-chain (Monad Solidity contract) to enter a room or initiate a match
 - Escrow held in a contract-held vault keyed by `(staker, room_id)`
 - Three stake types: `room_entry`, `match_request`, `dm_unlock`
 - Auto-slash: Celery worker evaluates no-shows hourly
@@ -139,7 +139,7 @@ contracts/
 ```
 
 **Infrastructure primitives** (via Agent-402):
-- **Circle USDC** — escrow funding and release
+- **Monad escrow** — on-chain stake funding and release (native MON)
 - **Hedera HCS** — immutable audit log for attestations and safety decisions
 - **ZeroDB** — vector memory for AI preference matching
 - **X402** — HTTP payment protocol for stake transactions
@@ -172,7 +172,7 @@ This means each (user, room) pair has its own on-chain vault. The contract expos
 
 | Function | Authority | Effect |
 |-------------|-----------|--------|
-| `stake()` | Staker | Pull ERC-20 USDC into the escrow vault |
+| `stake()` | Staker | Send native MON into the escrow vault (`payable`) |
 | `refund()` | `admin` (API) | Release full stake back to staker |
 | `slash()` | `admin` (API) | Transfer slash % to safety fund, remainder to staker |
 
@@ -244,7 +244,7 @@ For distribution steps (PWA install + APK sideload), see `docs/deployment/DISTRI
 
 ```bash
 # Clone and configure
-git clone https://github.com/AINative-Studio/monad-mate-trust-api
+git clone https://github.com/HankGrimm/monad-mate-trust-api
 cd monad-mate-trust-api
 cp .env.example .env  # fill in DATABASE_URL, SECRET_KEY, MONAD_RPC_URL
 
@@ -300,7 +300,7 @@ Monad Mate integrates several infrastructure layers through the Agent402 / AINat
 
 | Primitive | Provider | How we use it |
 |-----------|---------|--------------|
-| USDC escrow & transfer | **Circle** (via Agent402) | Fund, hold, release, and slash stakes |
+| On-chain stake escrow | **MonadMateEscrow** (native MON) | Fund, hold, release, and slash stakes on Monad |
 | Immutable audit trail | **Hedera HCS** (via Agent402) | Anchor every attestation and safety decision on-chain |
 | LLM inference | **AINative Studio API** | `claude-sonnet-4-5` intro generation, `llama-3.3-8b` message moderation |
 | Vector embeddings | **AINative ZeroDB** | 768-dim BAAI/bge embeddings at 16ms; semantic cross-user search |
@@ -330,7 +330,7 @@ Monad Mate's three core primitives have been extracted as standalone, dependency
 
 | Package | Install | What it does |
 |---------|---------|-------------|
-| **[`monadmate-stake-sdk`](packages/monadmate-stake-sdk/)** | `pip install monadmate-stake-sdk` | Stake-gated access control — `StakeGate`, `StakeRecord`, `SlashingPolicy`. Any Monad dApp can require USDC before a DM, room entry, or action. No-show multiplier built in. |
+| **[`monadmate-stake-sdk`](packages/monadmate-stake-sdk/)** | `pip install monadmate-stake-sdk` | Stake-gated access control — `StakeGate`, `StakeRecord`, `SlashingPolicy`. Any Monad dApp can require MON before a DM, room entry, or action. No-show multiplier built in. |
 | **[`monadmate-reputation`](packages/monadmate-reputation/)** | `pip install monadmate-reputation` | 5-dimension portable reputation scoring with time-based decay and Hedera HCS anchoring. Framework-agnostic — bring your own storage. |
 | **[`x402-monad`](packages/x402-monad/)** | `pip install x402-monad` | FastAPI middleware for Coinbase x402 HTTP payments on Base. Drop-in `require_x402_payment()` dependency for any endpoint. |
 
@@ -341,8 +341,8 @@ All three are MIT licensed and located in `packages/`. They don't depend on each
 from monadmate_stake_sdk import StakeGate, StakeType
 
 gate = StakeGate()
-ok, error = gate.validate(StakeType.DM, amount_usdc=0.50, no_show_count=0)
-record = gate.create_stake(user_id="0xABC", stake_type=StakeType.DM, amount_usdc=0.50)
+ok, error = gate.validate(StakeType.DM, amount_mon=0.50, no_show_count=0)
+record = gate.create_stake(user_id="0xABC", stake_type=StakeType.DM, amount_mon=0.50)
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get involved.
@@ -386,7 +386,7 @@ Monad Mate implements the [x402 HTTP payment protocol](https://x402.org) on Base
 
 ```
 Client → POST /api/v1/stakes (stake_type=dm, no payment)
-Server → 402 Payment Required + payment requirements (Base USDC)
+Server → 402 Payment Required + payment requirements (Base MON)
 Client → pays 0.5 USDC on Base via Coinbase facilitator
 Client → POST /api/v1/stakes (X-Payment: <proof>)
 Server → verifies proof via https://x402.org/facilitator/verify
@@ -395,7 +395,7 @@ Server → 201 Created (stake unlocked)
 
 **Payment details:**
 - Network: Base mainnet
-- Asset: USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`)
+- Asset: MON (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`)
 - Amount: 0.5 USDC (500,000 micro-units, 6 decimals)
 - Facilitator: Coinbase public facilitator (`https://x402.org/facilitator`)
 
@@ -417,7 +417,7 @@ COINBASE_PAYMENT_ADDRESS=0xYourBaseWalletAddress
 
 ## Running Locally — API Keys Setup
 
-Monad Mate is designed to run without external API keys in development. All third-party integrations (Circle, Hedera, ZeroDB) **gracefully no-op** when credentials are missing — the API still starts and all tests pass.
+Monad Mate is designed to run without external API keys in development. All third-party integrations (Hedera, ZeroDB) **gracefully no-op** when credentials are missing — the API still starts and all tests pass.
 
 ### Minimum setup (no external services)
 
@@ -453,18 +453,6 @@ MONAD_ESCROW_ADDRESS=<from: cd contracts && bash scripts/deploy_testnet.sh>
 MONAD_EVENT_LOG_ADDRESS=<from the same deploy output>
 MONAD_PRIVATE_KEY=<backend authority key — only this key can refund/slash>
 ```
-
-#### Circle USDC (real money movement)
-Sign up at https://developer.circle.com — use the sandbox for free testing.
-
-```env
-CIRCLE_API_KEY=TEST_API_KEY:...          # from circle.com/developers
-CIRCLE_ENVIRONMENT=sandbox               # or "production"
-CIRCLE_ESCROW_WALLET_ID=<wallet-id>      # your Circle escrow wallet
-CIRCLE_SAFETY_FUND_WALLET_ID=<wallet-id> # your Circle safety fund wallet
-```
-
-> Without these, stake create/refund/slash still work — Circle calls log a debug message and return a `stub` result.
 
 #### Hedera HCS (immutable audit trail)
 Sign up at https://portal.hedera.com — testnet accounts are free.
@@ -510,14 +498,7 @@ MONAD_RPC_URL=https://testnet-rpc.monad.xyz
 MONAD_CHAIN_ID=10143
 MONAD_ESCROW_ADDRESS=
 MONAD_EVENT_LOG_ADDRESS=
-MONAD_USDC_ADDRESS=
 MONAD_PRIVATE_KEY=
-
-# ── Circle USDC ───────────────────────────────────────────────────────────────
-CIRCLE_API_KEY=
-CIRCLE_ENVIRONMENT=sandbox
-CIRCLE_ESCROW_WALLET_ID=
-CIRCLE_SAFETY_FUND_WALLET_ID=
 
 # ── Hedera HCS ────────────────────────────────────────────────────────────────
 HEDERA_ACCOUNT_ID=
@@ -533,10 +514,10 @@ ZERODB_API_URL=https://api.ainative.studio
 # ── OpenAI (optional) ─────────────────────────────────────────────────────────
 OPENAI_API_KEY=
 
-# ── Stake thresholds (USDC) ───────────────────────────────────────────────────
-MIN_STAKE_ROOM_USDC=1.0
-MIN_STAKE_MEETUP_USDC=2.0
-MIN_STAKE_DM_USDC=0.5
+# ── Stake thresholds (MON) ───────────────────────────────────────────────────
+MIN_STAKE_ROOM_MON=1.0
+MIN_STAKE_MEETUP_MON=2.0
+MIN_STAKE_DM_MON=0.5
 
 # ── Celery / Redis (for background workers) ───────────────────────────────────
 REDIS_URL=redis://localhost:6379/0
@@ -554,12 +535,7 @@ REDIS_URL=redis://localhost:6379/0
 | `MONAD_CHAIN_ID` | No | Monad chain id (default: `10143`, testnet) |
 | `MONAD_ESCROW_ADDRESS` | No | Deployed `MonadMateEscrow` address |
 | `MONAD_EVENT_LOG_ADDRESS` | No | Deployed `MonadMateEventLog` address |
-| `MONAD_USDC_ADDRESS` | No | ERC-20 used as the stake asset |
 | `MONAD_PRIVATE_KEY` | No | Backend authority key for refund/slash and event-log writes |
-| `CIRCLE_API_KEY` | No | Circle USDC API key (sandbox or prod) |
-| `CIRCLE_ENVIRONMENT` | No | `sandbox` or `production` (default: sandbox) |
-| `CIRCLE_ESCROW_WALLET_ID` | No | Circle wallet ID for escrow holds |
-| `CIRCLE_SAFETY_FUND_WALLET_ID` | No | Circle wallet ID for slashed funds |
 | `HEDERA_ACCOUNT_ID` | No | Hedera operator account (e.g. `0.0.12345`) |
 | `HEDERA_PRIVATE_KEY` | No | Hedera ED25519 private key |
 | `HEDERA_TOPIC_ID` | No | HCS topic ID for audit logs |
@@ -569,8 +545,20 @@ REDIS_URL=redis://localhost:6379/0
 | `ZERODB_API_URL` | No | ZeroDB base URL (default: `https://api.ainative.studio`) |
 | `OPENAI_API_KEY` | No | OpenAI key for enhanced intro generation |
 | `REDIS_URL` | No | Redis URL for Celery workers (default: `redis://localhost:6379/0`) |
-| `MIN_STAKE_ROOM_USDC` | No | Min USDC stake for room entry (default: 1.0) |
-| `MIN_STAKE_MEETUP_USDC` | No | Min USDC stake for meetup request (default: 2.0) |
-| `MIN_STAKE_DM_USDC` | No | Min USDC stake to unlock DMs (default: 0.5) |
+| `MIN_STAKE_ROOM_MON` | No | Min MON stake for room entry (default: 1.0) |
+| `MIN_STAKE_MEETUP_MON` | No | Min MON stake for meetup request (default: 2.0) |
+| `MIN_STAKE_DM_MON` | No | Min MON stake to unlock DMs (default: 0.5) |
 | `X402_ENABLED` | No | Enable Coinbase x402 payment gate on DM unlock (default: false) |
 | `COINBASE_PAYMENT_ADDRESS` | No | Base wallet address to receive x402 USDC payments |
+
+---
+
+## Credits
+
+Maintained by [HankGrimm](https://github.com/HankGrimm) — the Monad migration
+(Solidity escrow, native-MON staking, EIP-191 wallet auth, event-log anchoring)
+was built for this repo.
+
+Built on top of the MIT-licensed [Monad Mate Trust API](https://github.com/AINative-Studio/monad-mate-trust-api)
+by AINative Studio. See [LICENSE](LICENSE) for both copyright notices.
+

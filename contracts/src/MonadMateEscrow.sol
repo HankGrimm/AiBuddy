@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {IERC20} from "./interfaces/IERC20.sol";
-
 /// @title Monad Mate Safety Escrow
 /// @notice Implements stake-to-interact mechanics for social trust:
-///         1. User stakes USDC into the escrow contract
+///         1. User stakes native MON into the escrow contract
 ///         2. On meetup confirmation, stake is refunded
 ///         3. On no-show/harassment, stake is slashed and sent to the safety fund
 ///         4. Backend authority (Monad Mate API) controls release/slash decisions
@@ -53,11 +51,8 @@ contract MonadMateEscrow {
     /// @notice Backend authority allowed to refund/slash stakes.
     address public admin;
 
-    /// @notice Destination for slashed funds.
+    /// @notice Destination for slashed MON.
     address public safetyFund;
-
-    /// @notice USDC (or any ERC20) used as the stake asset.
-    IERC20 public immutable stakeToken;
 
     uint256 public totalStaked;
     uint256 public totalSlashed;
@@ -90,23 +85,22 @@ contract MonadMateEscrow {
     // -----------------------------------------------------------------------
 
     error ZeroStakeAmount();
-    error InsufficientBalance();
     error InvalidStakeStatus();
     error InvalidSlashBps();
     error Unauthorized();
     error StakeAlreadyExists();
     error ZeroAddress();
-    error TransferFailed();
+    error NativeTransferFailed();
+    error DirectTransferRejected();
 
     // -----------------------------------------------------------------------
     // Construction
     // -----------------------------------------------------------------------
 
-    constructor(address stakeToken_, address admin_, address safetyFund_) {
-        if (stakeToken_ == address(0) || admin_ == address(0) || safetyFund_ == address(0)) {
+    constructor(address admin_, address safetyFund_) {
+        if (admin_ == address(0) || safetyFund_ == address(0)) {
             revert ZeroAddress();
         }
-        stakeToken = IERC20(stakeToken_);
         admin = admin_;
         safetyFund = safetyFund_;
         emit AuthorityInitialized(admin_, safetyFund_);
@@ -115,6 +109,10 @@ contract MonadMateEscrow {
     modifier onlyAdmin() {
         if (msg.sender != admin) revert Unauthorized();
         _;
+    }
+
+    receive() external payable {
+        revert DirectTransferRejected(); // funds must enter through stake()
     }
 
     // -----------------------------------------------------------------------
@@ -137,11 +135,11 @@ contract MonadMateEscrow {
     // Staking
     // -----------------------------------------------------------------------
 
-    /// @notice Stake USDC into escrow for a room interaction.
-    /// @dev Caller must have approved this contract for at least `amount`.
-    function stake(bytes32 roomId, uint256 amount, StakeType stakeType) external {
+    /// @notice Stake native MON into escrow for a room interaction.
+    /// @dev The staked amount is `msg.value`.
+    function stake(bytes32 roomId, StakeType stakeType) external payable {
+        uint256 amount = msg.value;
         if (amount == 0) revert ZeroStakeAmount();
-        if (stakeToken.balanceOf(msg.sender) < amount) revert InsufficientBalance();
 
         bytes32 key = vaultKey(msg.sender, roomId);
         if (_vaults[key].status != StakeStatus.None) revert StakeAlreadyExists();
@@ -158,8 +156,6 @@ contract MonadMateEscrow {
 
         totalStaked += amount;
 
-        _pullToken(msg.sender, amount);
-
         emit StakeDeposited(msg.sender, roomId, amount, stakeType);
     }
 
@@ -174,13 +170,13 @@ contract MonadMateEscrow {
         vault.resolvedAt = uint64(block.timestamp);
         totalRefunded += amount;
 
-        _pushToken(staker, amount);
+        _sendMon(staker, amount);
 
         emit StakeRefunded(staker, roomId, amount);
     }
 
     /// @notice Slash a stake for no-show, harassment, or fraud.
-    /// @param slashBps Basis points to slash (e.g. 5000 = 50%). Slashed funds go
+    /// @param slashBps Basis points to slash (e.g. 5000 = 50%). Slashed MON goes
     ///        to `safetyFund`; the remainder is returned to the staker.
     function slash(address staker, bytes32 roomId, uint16 slashBps, SlashReason reason) external onlyAdmin {
         if (slashBps > 10_000) revert InvalidSlashBps();
@@ -197,8 +193,8 @@ contract MonadMateEscrow {
         vault.resolvedAt = uint64(block.timestamp);
         totalSlashed += slashAmount;
 
-        if (slashAmount > 0) _pushToken(safetyFund, slashAmount);
-        if (refundAmount > 0) _pushToken(staker, refundAmount);
+        if (slashAmount > 0) _sendMon(safetyFund, slashAmount);
+        if (refundAmount > 0) _sendMon(staker, refundAmount);
 
         emit StakeSlashed(staker, roomId, slashAmount, refundAmount, slashBps, reason);
     }
@@ -219,11 +215,9 @@ contract MonadMateEscrow {
     // Internal
     // -----------------------------------------------------------------------
 
-    function _pullToken(address from, uint256 amount) private {
-        if (!stakeToken.transferFrom(from, address(this), amount)) revert TransferFailed();
-    }
-
-    function _pushToken(address to, uint256 amount) private {
-        if (!stakeToken.transfer(to, amount)) revert TransferFailed();
+    /// @dev State is always updated before this runs (checks-effects-interactions).
+    function _sendMon(address to, uint256 amount) private {
+        (bool success,) = to.call{value: amount}("");
+        if (!success) revert NativeTransferFailed();
     }
 }

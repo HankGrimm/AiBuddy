@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {IERC20} from "../src/interfaces/IERC20.sol";
+import {IERC20} from "../interfaces/IERC20.sol";
 
 /// @notice Minimal 6-decimal ERC20 standing in for USDC in tests and on testnet.
 contract MockUSDC is IERC20 {

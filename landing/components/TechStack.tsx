@@ -22,7 +22,7 @@ const STACK = [
     items: [
       { name: "llama-3.3-70b", desc: "Personalized intro generation via AINative" },
       { name: "ZeroDB", desc: "768-dim BAAI/bge vectors for preference matching" },
-      { name: "Circle USDC", desc: "Escrow funding, refund, slash" },
+      { name: "Hedera HCS", desc: "Tamper-proof audit log for safety decisions" },
       { name: "AINative Studio", desc: "LLM inference + embedding API" },
     ],
   },

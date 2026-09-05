@@ -4,17 +4,17 @@
 
 ## IDENTITY
 Name: Monad Mate
-Tagline: Stake USDC to DM, match, and meet. No-shows get slashed on Monad.
+Tagline: Stake MON to DM, match, and meet. No-shows get slashed on Monad.
 Type: Social dApp — Web3 / Monad
 Hackathon: EasyA × Consensus Miami 2026
-Built by: AINative Studio (https://ainative.studio)
+Built by: HankGrimm (https://github.com/HankGrimm)
 Network: Monad (testnet), Base (Coinbase x402)
 API: https://monad-mate-trust-api-production.up.railway.app
 Docs: https://monad-mate-trust-api-production.up.railway.app/docs
 
 ## HOW IT WORKS
 1. Connect MetaMask or Rabby wallet
-2. Stake USDC to send a DM, enter a room, or propose a meetup
+2. Stake MON to send a DM, enter a room, or propose a meetup
 3. Both parties must confirm (GPS attestation) for meetup to count
 4. No-show → stake slashed. Show up → stake returned + reputation boost
 5. After a confirmed meetup, mint a Moment NFT as proof of connection
@@ -22,9 +22,9 @@ Docs: https://monad-mate-trust-api-production.up.railway.app/docs
 ## STAKE TYPES
 | Type | Minimum stake | Slashing trigger |
 |------|--------------|-----------------|
-| DM   | 0.01 USDC    | Sender no-show or harassment |
-| Room entry | 0.10 USDC | No-show at event |
-| Meetup | 1.00 USDC | No-show (GPS unconfirmed) |
+| DM   | 0.01 MON    | Sender no-show or harassment |
+| Room entry | 0.10 MON | No-show at event |
+| Meetup | 1.00 MON | No-show (GPS unconfirmed) |
 
 ## SLASHING POLICY
 | Reason | Slash % | Notes |
@@ -70,7 +70,7 @@ GET /api/v1/rooms
 
 ### Stakes
 POST /api/v1/stakes
-  Body: { "stake_type": "dm|room|meetup", "target_id": "uuid", "amount_usdc": float }
+  Body: { "stake_type": "dm|room|meetup", "target_id": "uuid", "amount_mon": float }
   Response: { "id": "uuid", "tx_hash": "string", "status": "pending|confirmed" }
 
 ### Matches
@@ -133,5 +133,5 @@ pip install monadmate-x402
 - Flow: HTTP 402 response → wallet signs payment → retry with payment header
 
 ## SECURITY
-Contact: security@ainative.studio
-Responsible disclosure: https://ainative.studio/.well-known/security.txt
+Contact: HankGrimm91@gmail.com
+Responsible disclosure: https://github.com/HankGrimm/monad-mate-trust-api/security

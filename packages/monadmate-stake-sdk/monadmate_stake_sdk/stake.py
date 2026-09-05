@@ -32,7 +32,7 @@ class StakeStatus(str, enum.Enum):
     DISPUTED = "disputed"
 
 
-# Default minimum USDC amounts per stake type
+# Default minimum MON amounts per stake type
 DEFAULT_MIN_AMOUNTS: dict[StakeType, float] = {
     StakeType.DM: 0.50,
     StakeType.ROOM_ENTRY: 0.10,
@@ -51,13 +51,13 @@ class StakeRecord:
     """Represents a single stake. Storage-agnostic (no ORM)."""
     user_id: str
     stake_type: StakeType
-    amount_usdc: float
+    amount_mon: float
     id: str = field(default_factory=lambda: str(uuid4()))
     status: StakeStatus = StakeStatus.PENDING
     room_id: Optional[str] = None
     reference_id: Optional[str] = None       # match_id, dm_id, etc.
     monad_tx_hash: Optional[str] = None      # EventLog tx hash
-    circle_transfer_id: Optional[str] = None
+    monad_escrow_ref: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -79,7 +79,7 @@ class StakeGate:
     Validates and manages stake requirements for any action type.
 
     Args:
-        min_amounts:  Per-type minimum USDC amounts. Falls back to DEFAULT_MIN_AMOUNTS.
+        min_amounts:  Per-type minimum MON amounts. Falls back to DEFAULT_MIN_AMOUNTS.
         on_stake:     Optional callback(record: StakeRecord) called after stake creation.
         on_refund:    Optional callback(record: StakeRecord) after refund.
         on_slash:     Optional callback(record: StakeRecord, reason: str) after slash.
@@ -111,7 +111,7 @@ class StakeGate:
     def validate(
         self,
         stake_type: StakeType,
-        amount_usdc: float,
+        amount_mon: float,
         no_show_count: int = 0,
     ) -> tuple[bool, str]:
         """
@@ -120,15 +120,15 @@ class StakeGate:
         Returns (True, "") or (False, error_message).
         """
         required = self.required_amount(stake_type, no_show_count)
-        if amount_usdc < required:
-            return False, f"Minimum stake for {stake_type.value} is {required:.2f} USDC (you sent {amount_usdc:.2f})"
+        if amount_mon < required:
+            return False, f"Minimum stake for {stake_type.value} is {required:.2f} MON (you sent {amount_mon:.2f})"
         return True, ""
 
     def create_stake(
         self,
         user_id: str,
         stake_type: StakeType,
-        amount_usdc: float,
+        amount_mon: float,
         room_id: Optional[str] = None,
         reference_id: Optional[str] = None,
         no_show_count: int = 0,
@@ -138,14 +138,14 @@ class StakeGate:
 
         Raises ValueError if amount doesn't meet minimum.
         """
-        valid, error = self.validate(stake_type, amount_usdc, no_show_count)
+        valid, error = self.validate(stake_type, amount_mon, no_show_count)
         if not valid:
             raise ValueError(error)
 
         record = StakeRecord(
             user_id=user_id,
             stake_type=stake_type,
-            amount_usdc=amount_usdc,
+            amount_mon=amount_mon,
             room_id=room_id,
             reference_id=reference_id,
         )

@@ -1,7 +1,7 @@
 """
 monadmate-stake-sdk — Stake-gated access control for Monad dApps
 
-Any Monad dApp can require a USDC stake before a DM, room entry, or action.
+Any Monad dApp can require a MON stake before a DM, room entry, or action.
 Extracted from Monad Mate Trust API.
 
 Install: pip install monadmate-stake-sdk
@@ -10,8 +10,7 @@ Features:
   - Stake lifecycle: create → active → refund/slash
   - Three stake types: dm_unlock, room_entry, meetup_request
   - Monad EventLog on-chain recording
-  - Circle USDC escrow (graceful stub when unconfigured)
-  - Per-type minimum USDC amounts
+  - Per-type minimum MON amounts
   - Repeat offender multiplier (each no-show raises required stake 0.5×)
 """
 

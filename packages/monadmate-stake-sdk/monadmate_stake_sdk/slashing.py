@@ -76,7 +76,7 @@ class SlashingPolicy:
         self.always_slash = frozenset(always_slash) if always_slash else _ALWAYS_SLASH
 
     def slash_amount(self, stake_amount: float, reason: SlashReason) -> float:
-        """Return the USDC amount to slash given a stake amount and reason."""
+        """Return the MON amount to slash given a stake amount and reason."""
         pct = self.slash_pcts.get(reason, 1.0)
         return round(stake_amount * pct, 6)
 

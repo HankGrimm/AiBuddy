@@ -19,15 +19,14 @@ class EscrowService:
             type=EscrowType.MEETUP,
             initiator_user_id=user.id,
             counterparty_user_id=payload.counterparty_user_id,
-            amount_usdc=payload.amount_usdc,
+            amount_mon=payload.amount_mon,
             status=EscrowStatus.OPEN,
             confirm_deadline=payload.confirm_deadline,
         )
         self.db.add(escrow)
         self.db.commit()
         self.db.refresh(escrow)
-        # TODO: circle_service.debit(user_wallet=user.wallet_address, amount=payload.amount_usdc)
-        # Interface: CircleService.debit(user_wallet: str, amount: float) -> CircleTransferResult
+        # Funds are held on-chain by the MonadMateEscrow contract (native MON).
         # TODO: anchor to Hedera HCS
         return escrow
 
@@ -40,8 +39,7 @@ class EscrowService:
 
         escrow.status = EscrowStatus.CONFIRMED
         escrow.resolved_at = datetime.utcnow()
-        # TODO: circle_service.credit(user_wallet=<counterparty_wallet>, amount=escrow.amount_usdc)
-        # Interface: CircleService.credit(user_wallet: str, amount: float) -> CircleTransferResult
+        # On-chain MON settlement happens in the MonadMateEscrow contract.
         self.db.commit()
         self.db.refresh(escrow)
         return escrow

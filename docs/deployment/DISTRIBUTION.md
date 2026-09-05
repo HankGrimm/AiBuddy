@@ -75,10 +75,10 @@ dist/
 Copy to reuse:
 
 - Name: **Monad Mate**
-- Tagline: Stake USDC to DM, match, and meet.
+- Tagline: Stake MON to DM, match, and meet.
 - Short description: Stake-to-interact social app. Skin in the game replaces swipe culture.
 - Long description: Monad Mate is a stake-to-interact social app where economic
-  accountability replaces swipe culture. Stake USDC to enter rooms, request matches,
+  accountability replaces swipe culture. Stake MON to enter rooms, request matches,
   and unlock DMs. Genuine meetups release your stake. No-shows get slashed.
   AI matchmaking. GPS attestation. Hedera HCS audit trail.
 

@@ -2,8 +2,8 @@
   "schema_version": "v1",
   "name_for_human": "Monad Mate",
   "name_for_model": "monad_mate",
-  "description_for_human": "Stake-to-interact social dApp on Monad. Stake USDC to DM, match, and meet. No-shows get slashed.",
-  "description_for_model": "Monad Mate is a trust-based social dApp on Monad. Users stake USDC to send DMs, enter rooms, and confirm meetups. No-shows are automatically slashed. Features: wallet-signature auth, AI matchmaking (AINative embeddings + ZeroDB), GPS-verified meetup attestation, Moment NFTs, MON gifts, Coinbase x402 USDC payments on Base. API at https://monad-mate-trust-api-production.up.railway.app. Key endpoints: POST /api/v1/auth/wallet/connect, GET /api/v1/rooms, POST /api/v1/stakes, POST /api/v1/matches, POST /api/v1/messages, POST /api/v1/attestations, POST /api/v1/transfers, POST /api/v1/nfts/mint-moment.",
+  "description_for_human": "Stake-to-interact social dApp on Monad. Stake MON to DM, match, and meet. No-shows get slashed.",
+  "description_for_model": "Monad Mate is a trust-based social dApp on Monad. Users stake MON to send DMs, enter rooms, and confirm meetups. No-shows are automatically slashed. Features: wallet-signature auth, AI matchmaking (AINative embeddings + ZeroDB), GPS-verified meetup attestation, Moment NFTs, MON gifts, Coinbase x402 USDC payments on Base. API at https://monad-mate-trust-api-production.up.railway.app. Key endpoints: POST /api/v1/auth/wallet/connect, GET /api/v1/rooms, POST /api/v1/stakes, POST /api/v1/matches, POST /api/v1/messages, POST /api/v1/attestations, POST /api/v1/transfers, POST /api/v1/nfts/mint-moment.",
   "auth": {
     "type": "service_http",
     "authorization_type": "bearer"
@@ -14,6 +14,6 @@
     "is_user_authenticated": true
   },
   "logo_url": "https://monad-mate-landing-production.up.railway.app/icon.png",
-  "contact_email": "toby@ainative.studio",
+  "contact_email": "HankGrimm91@gmail.com",
   "legal_info_url": "https://monad-mate-landing-production.up.railway.app"
 }

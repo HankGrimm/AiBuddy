@@ -105,7 +105,7 @@ class HCSAnchor:
         stake_id: str,
         user_id: str,
         decision: str,  # "refund" | "slash"
-        amount_usdc: float,
+        amount_mon: float,
         reason: Optional[str] = None,
     ) -> Optional[str]:
         """Publish a stake refund or slash decision to HCS."""
@@ -114,7 +114,7 @@ class HCSAnchor:
             "stake_id": stake_id,
             "user_id": user_id,
             "decision": decision,
-            "amount_usdc": amount_usdc,
+            "amount_mon": amount_mon,
             "reason": reason,
             "timestamp": datetime.utcnow().isoformat() + "Z",
         }

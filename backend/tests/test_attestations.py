@@ -62,7 +62,7 @@ def make_escrow(db, user_a: User, user_b: User) -> Escrow:
         type=EscrowType.MEETUP,
         initiator_user_id=user_a.id,
         counterparty_user_id=user_b.id,
-        amount_usdc=5.0,
+        amount_mon=5.0,
         status=EscrowStatus.OPEN,
     )
     db.add(e)

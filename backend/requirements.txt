@@ -16,8 +16,7 @@ anyio==4.6.2
 # Monad (EVM)
 web3==7.6.0
 eth-account==0.13.4
-# Hedera (HCS anchoring — uses httpx directly, no SDK needed)
-# Circle (USDC payments — uses httpx directly, no SDK needed)
+# Hedera (HCS anchoring - uses httpx directly, no SDK needed)
 # ZeroDB
 zerodb-mcp==1.1.0
 # LLM

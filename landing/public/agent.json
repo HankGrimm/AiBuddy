@@ -1,6 +1,6 @@
 {
   "name": "Monad Mate",
-  "description": "Stake-to-interact social dApp on Monad. Stake USDC to DM, match, and meet. No-shows get slashed.",
+  "description": "Stake-to-interact social dApp on Monad. Stake MON to DM, match, and meet. No-shows get slashed.",
   "url": "https://monad-mate-landing-production.up.railway.app",
   "api": "https://monad-mate-trust-api-production.up.railway.app",
   "docs": "https://monad-mate-trust-api-production.up.railway.app/docs",
@@ -29,7 +29,7 @@
   "network": "monad-testnet",
   "payment_network": "base-mainnet",
   "sdks": "https://monad-mate-landing-production.up.railway.app/sdks.txt",
-  "built_by": "AINative Studio — https://ainative.studio",
+  "built_by": "HankGrimm — https://github.com/HankGrimm",
   "hackathon": "EasyA x Consensus Miami 2026",
   "version": "0.1.0"
 }

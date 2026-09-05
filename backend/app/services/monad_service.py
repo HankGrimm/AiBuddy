@@ -146,13 +146,16 @@ class MonadService:
             else:
                 # No event-log contract configured — record the payload as
                 # calldata on a zero-value self-transfer.
+                # Monad charges gas on the *limit*, not usage, and a plain
+                # transfer is always exactly 21,000 — hardcode it instead
+                # of paying for a padded estimate.
                 tx = {
                     **base_tx,
                     "to": account.address,
                     "value": 0,
+                    "gas": 21_000,
                     "data": Web3.to_hex(payload_json.encode("utf-8")),
                 }
-                tx["gas"] = w3.eth.estimate_gas(tx)
 
             # Only fill fee fields the builder left out — mixing legacy
             # gasPrice with EIP-1559 fields would make the tx unsignable.
@@ -186,7 +189,7 @@ class MonadService:
         self,
         stake_id: str,
         user_wallet: Optional[str],
-        amount_usdc: float,
+        amount_mon: float,
         stake_type: str,
     ) -> Optional[str]:
         """Record a stake event on-chain.
@@ -198,7 +201,7 @@ class MonadService:
             "contract": _event_log_address(),
             "stake_id": str(stake_id),
             "wallet": user_wallet,
-            "amount": round(amount_usdc, 6),
+            "amount": round(amount_mon, 6),
             "type": str(stake_type),
         }
         return self._submit_record("stake", str(stake_id), payload)
@@ -207,7 +210,7 @@ class MonadService:
         self,
         stake_id: str,
         user_wallet: Optional[str],
-        amount_usdc: float,
+        amount_mon: float,
     ) -> Optional[str]:
         """Record a refund event on-chain.
 
@@ -218,7 +221,7 @@ class MonadService:
             "contract": _event_log_address(),
             "stake_id": str(stake_id),
             "wallet": user_wallet,
-            "amount": round(amount_usdc, 6),
+            "amount": round(amount_mon, 6),
         }
         return self._submit_record("refund", str(stake_id), payload)
 
@@ -226,7 +229,7 @@ class MonadService:
         self,
         stake_id: str,
         user_wallet: Optional[str],
-        amount_usdc: float,
+        amount_mon: float,
         reason: str,
     ) -> Optional[str]:
         """Record a slash event on-chain.
@@ -238,7 +241,7 @@ class MonadService:
             "contract": _event_log_address(),
             "stake_id": str(stake_id),
             "wallet": user_wallet,
-            "amount": round(amount_usdc, 6),
+            "amount": round(amount_mon, 6),
             "reason": reason,
         }
         return self._submit_record("slash", str(stake_id), payload)

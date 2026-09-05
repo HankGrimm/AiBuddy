@@ -34,7 +34,7 @@ class StakeRequiredError(MonadMateError):
     def __init__(self, amount: float, action: str):
         super().__init__(
             status_code=402,
-            detail=f"Stake of {amount} USDC required to {action}",
+            detail=f"Stake of {amount} MON required to {action}",
         )
 
 
@@ -47,7 +47,7 @@ class InsufficientStakeError(MonadMateError):
     def __init__(self, required: float, provided: float):
         super().__init__(
             status_code=402,
-            detail=f"Insufficient stake: {provided} USDC provided, {required} USDC required",
+            detail=f"Insufficient stake: {provided} MON provided, {required} MON required",
         )
 
 

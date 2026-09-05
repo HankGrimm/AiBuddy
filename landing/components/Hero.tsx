@@ -1,6 +1,6 @@
 "use client";
 
-const GITHUB_URL = "https://github.com/AINative-Studio/monad-mate-trust-api";
+const GITHUB_URL = "https://github.com/HankGrimm/monad-mate-trust-api";
 const API_URL = "https://monad-mate-trust-api-production.up.railway.app";
 
 export default function Hero() {
@@ -26,7 +26,7 @@ export default function Hero() {
 
       {/* Subheadline */}
       <p className="relative text-lg md:text-xl text-white/60 max-w-2xl mb-10 leading-relaxed">
-        Stake USDC to DM, match, and meet. No-shows get slashed. Genuine
+        Stake MON to DM, match, and meet. No-shows get slashed. Genuine
         connections earn reputation. AI matchmaking finds real chemistry — not
         just swipes.
       </p>
@@ -35,7 +35,7 @@ export default function Hero() {
       <div className="relative flex flex-wrap justify-center gap-3 mb-10 text-sm">
         {[
           { icon: "⚡", label: "Monad EIP-191 Auth" },
-          { icon: "💰", label: "USDC Stake Escrow" },
+          { icon: "💰", label: "MON Stake Escrow" },
           { icon: "🤖", label: "AI Match Agent" },
           { icon: "📍", label: "GPS Attestation" },
           { icon: "🔗", label: "Hedera HCS Audit" },
@@ -107,7 +107,7 @@ export default function Hero() {
             </div>
             <div className="text-xs text-white/60 leading-relaxed mb-3">
               "Both into Solidity and zero-knowledge proofs — rare combo. Stake 0.5
-              USDC to connect?"
+              MON to connect?"
             </div>
             <div className="flex gap-2">
               <button className="flex-1 py-2 rounded-xl bg-brand-violet/20 border border-brand-violet/40 text-xs text-violet-300 font-medium">
@@ -122,7 +122,7 @@ export default function Hero() {
           <div className="mx-4 p-3 rounded-xl bg-white/5 border border-white/10">
             <div className="text-xs text-white/50 mb-1">Your active stake</div>
             <div className="flex items-center justify-between">
-              <span className="font-bold text-green-400">0.50 USDC</span>
+              <span className="font-bold text-green-400">0.50 MON</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
                 Escrowed
               </span>

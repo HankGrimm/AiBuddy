@@ -28,7 +28,7 @@
 
 ## Overview
 
-Monad Mate is a stake-gated social dApp on Monad. Users stake USDC to DM, match, and meet. No-shows get slashed. All social interactions require economic accountability.
+Monad Mate is a stake-gated social dApp on Monad. Users stake MON to DM, match, and meet. No-shows get slashed. All social interactions require economic accountability.
 
 **Key design principles:**
 - All sensitive actions require an active stake
@@ -42,7 +42,7 @@ Monad Mate is a stake-gated social dApp on Monad. Users stake USDC to DM, match,
 - ZeroDB (768-dim BAAI/bge-base-en-v1.5 vectors)
 - llama-3.3-70b via AINative (intro generation)
 - Hedera HCS (immutable audit log)
-- Coinbase x402 (HTTP-native USDC payments)
+- Coinbase x402 (HTTP-native MON payments)
 
 ---
 
@@ -295,15 +295,15 @@ Returns `List[PersonaResponse]` for all active members.
 
 ## Stakes & Escrow
 
-Stakes are USDC locked on Monad before any high-trust interaction. No stake = no action.
+Stakes are MON locked on Monad before any high-trust interaction. No stake = no action.
 
 ### Stake Types
 
 | Type | Required For | Default Amount |
 |------|-------------|----------------|
-| `dm` | Sending first DM | 0.50 USDC |
-| `room_entry` | Joining a room | 1.00 USDC |
-| `meetup` | Proposing a meetup | 5.00 USDC |
+| `dm` | Sending first DM | 0.50 MON |
+| `room_entry` | Joining a room | 1.00 MON |
+| `meetup` | Proposing a meetup | 5.00 MON |
 
 ### Create Stake
 
@@ -314,14 +314,14 @@ Content-Type: application/json
 
 {
   "stake_type": "dm",
-  "amount_usdc": 0.50,
+  "amount_mon": 0.50,
   "room_id": "uuid",
   "target_user_id": "uuid",
   "tx_hash": "0x4f3a91c7..."
 }
 ```
 
-**Note:** For DM stakes with x402 enabled, an `X-Payment` header with a valid Coinbase x402 USDC proof is also required.
+**Note:** For DM stakes with x402 enabled, an `X-Payment` header with a valid Coinbase x402 MON proof is also required.
 
 **Response:** `StakeResponse`
 ```json
@@ -330,8 +330,8 @@ Content-Type: application/json
   "user_id": "uuid",
   "stake_type": "dm",
   "status": "active",
-  "amount_usdc": 0.50,
-  "currency": "USDC",
+  "amount_mon": 0.50,
+  "currency": "MON",
   "tx_hash": "0x4f3a91c7...",
   "escrow_id": "uuid",
   "expires_at": "2026-05-07T12:00:00Z",
@@ -396,12 +396,12 @@ Content-Type: application/json
 {
   "type": "meetup",
   "counterparty_user_id": "uuid",
-  "amount_usdc": 5.00,
+  "amount_mon": 5.00,
   "confirm_deadline": "2026-05-07T18:00:00Z"
 }
 ```
 
-**Response:** `EscrowResponse` — id, type, initiator_id, counterparty_id, amount_usdc, status, confirm_deadline, created_at
+**Response:** `EscrowResponse` — id, type, initiator_id, counterparty_id, amount_mon, status, confirm_deadline, created_at
 
 ---
 
@@ -996,8 +996,8 @@ The Monad Mate primitives are available as standalone open-source Python package
 ```bash
 pip install monadmate-stake-sdk    # Stake-gated access control
 pip install monadmate-reputation   # 5-dim reputation engine + HCS anchoring
-pip install monadmate-x402         # FastAPI x402 USDC payment middleware
+pip install monadmate-x402         # FastAPI x402 MON payment middleware
 ```
 
-GitHub: https://github.com/AINative-Studio/monad-mate-trust-api  
+GitHub: https://github.com/HankGrimm/monad-mate-trust-api  
 License: MIT

@@ -8,7 +8,7 @@ from ..models.escrow import EscrowType, EscrowStatus
 class EscrowCreate(BaseModel):
     type: EscrowType
     counterparty_user_id: UUID
-    amount_usdc: float = Field(..., gt=0)
+    amount_mon: float = Field(..., gt=0)
     confirm_deadline: Optional[datetime] = None
 
 
@@ -17,7 +17,7 @@ class EscrowResponse(BaseModel):
     type: EscrowType
     initiator_user_id: Optional[UUID]
     counterparty_user_id: Optional[UUID]
-    amount_usdc: float
+    amount_mon: float
     status: EscrowStatus
     hcs_topic_id: Optional[str]
     confirm_deadline: Optional[datetime]
