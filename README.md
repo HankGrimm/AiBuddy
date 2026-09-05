@@ -551,14 +551,3 @@ REDIS_URL=redis://localhost:6379/0
 | `X402_ENABLED` | No | Enable Coinbase x402 payment gate on DM unlock (default: false) |
 | `COINBASE_PAYMENT_ADDRESS` | No | Base wallet address to receive x402 USDC payments |
 
----
-
-## Credits
-
-Maintained by [HankGrimm](https://github.com/HankGrimm) — the Monad migration
-(Solidity escrow, native-MON staking, EIP-191 wallet auth, event-log anchoring)
-was built for this repo.
-
-Built on top of the MIT-licensed [Monad Mate Trust API](https://github.com/AINative-Studio/monad-mate-trust-api)
-by AINative Studio. See [LICENSE](LICENSE) for both copyright notices.
-

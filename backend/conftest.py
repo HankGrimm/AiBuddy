@@ -3,6 +3,18 @@ import os
 # does not attempt to connect to Postgres during test collection.
 os.environ.setdefault("DATABASE_URL", "sqlite://")
 
+# Isolate the test suite from a developer's local .env.  Real environment
+# variables take precedence over the .env file in pydantic-settings, so
+# setting them here pins the values the tests assert against and — critically —
+# keeps MonadService from signing live testnet transactions during unit tests.
+os.environ["MONAD_PRIVATE_KEY"] = ""
+os.environ["MONAD_KEYSTORE_PATH"] = "/nonexistent/monad-test.key"
+os.environ["MONAD_ESCROW_ADDRESS"] = ""
+os.environ["MONAD_EVENT_LOG_ADDRESS"] = ""
+os.environ["MIN_STAKE_DM_MON"] = "1.0"
+os.environ["MIN_STAKE_ROOM_MON"] = "0.5"
+os.environ["MIN_STAKE_MEETUP_MON"] = "5.0"
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
